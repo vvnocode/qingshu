@@ -1,0 +1,13 @@
+services:
+  qingshu-server:
+    image: vvnocode/qingshu-server:latest
+    container_name: qingshu-server
+    ports:
+      - "52014:52014"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 400M
+        reservations:
+          memory: 256M

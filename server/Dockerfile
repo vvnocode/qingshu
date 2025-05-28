@@ -5,7 +5,7 @@ FROM eclipse-temurin:21-jre
 RUN mkdir -p /qingshu
 WORKDIR /qingshu
 ## 将后端项目的 Jar 文件，复制到镜像中
-COPY ./target/server-0.0.1-SNAPSHOT.jar app.jar
+COPY ./target/server.jar app.jar
 
 ## 设置 TZ 时区
 ENV TZ=Asia/Shanghai
@@ -15,8 +15,8 @@ ENV JAVA_OPTS="-Xms256m -Xmx256m -Djava.security.egd=file:/dev/./urandom"
 ## 应用参数
 ENV ARGS=""
 
-## 暴露后端项目的 8080 端口
-EXPOSE 8080
+## 暴露后端项目的 52014 端口
+EXPOSE 52014
 
 ## 启动后端项目
 CMD java ${JAVA_OPTS} -jar app.jar $ARGS

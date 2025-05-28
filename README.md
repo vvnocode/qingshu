@@ -24,7 +24,7 @@ mvn clean package
 
 ### 3. 运行项目
 ```bash
-java -jar target/server-0.0.1-SNAPSHOT.jar
+java -jar target/server.jar
 ```
 
 ## Docker部署
@@ -34,10 +34,13 @@ java -jar target/server-0.0.1-SNAPSHOT.jar
 
 ```bash
 # 构建镜像
-docker build -t qingshu-server:latest .
+docker build -t vvnocode/qingshu-server:latest .
+
+# 发布镜像
+docker push vvnocode/qingshu-server:latest
 
 # 运行容器
-docker run -d -p 8080:8080 --name qingshu-server qingshu-server:latest
+docker run -d -p 52014:52014 --name qingshu-server vvnocode/qingshu-server:latest
 ```
 
 ### 2. 自定义JVM参数
