@@ -72,14 +72,58 @@ spring:
     password: your_password
 ```
 
-### 3. 编译和运行
+### 3. IDE开发环境配置
+
+#### VS Code配置
+项目已包含`.vscode/launch.json`配置文件，支持在VS Code中直接启动和调试：
+
+1. 安装Java扩展包
+2. 打开项目根目录
+3. 按F5或点击"运行和调试"
+4. 选择"启动 Qingshu Server (Docker DB)"配置
+
+**环境变量配置**：
+```json
+{
+    "type": "java",
+    "name": "启动 Qingshu Server (Docker DB)",
+    "request": "launch",
+    "mainClass": "org.qingshu.server.ServerApplication",
+    "projectName": "qingshu-server",
+    "cwd": "${workspaceFolder}/server",
+    "env": {
+        "SPRING_DATASOURCE_URL": "jdbc:mariadb://localhost:44638/qingshu?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai",
+        "SPRING_DATASOURCE_USERNAME": "root",
+        "SPRING_DATASOURCE_PASSWORD": "your_password",
+        "SPRING_PROFILES_ACTIVE": "dev"
+    }
+}
+```
+
+#### IntelliJ IDEA配置
+项目已包含`.idea/runConfigurations/Qingshu_Server.xml`配置文件：
+
+手动创建Spring Boot运行配置：
+  - Main class: `org.qingshu.server.ServerApplication`
+  - Working directory: `$PROJECT_DIR$/server`
+  - Environment variables:
+    ```
+    SPRING_DATASOURCE_URL=jdbc:mariadb://localhost:44638/qingshu?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai;SPRING_DATASOURCE_USERNAME=root;SPRING_DATASOURCE_PASSWORD=your_password;SPRING_PROFILES_ACTIVE=dev
+    ```
+
+**注意**：
+- Docker数据库端口为44638，本地数据库端口为3306
+- 请根据实际情况修改数据库密码
+- 开发环境建议使用`dev`配置文件
+
+### 4. 编译和运行
 ```bash
 cd server
 mvn clean install
 mvn spring-boot:run
 ```
 
-### 4. 访问应用
+### 5. 访问应用
 - **API文档**: http://localhost:52014/swagger-ui.html
 - **接口地址**: http://localhost:52014/v3/api-docs
 - **服务地址**: http://localhost:52014
