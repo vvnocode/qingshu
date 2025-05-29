@@ -98,7 +98,7 @@ docker build -t vvnocode/qingshu-server:latest .
 docker push vvnocode/qingshu-server:latest
 
 # 运行容器
-docker run -d -p 52014:52014 --name qingshu-server vvnocode/qingshu-server:latest
+docker-compose up -d
 ```
 
 ## 📚 API文档
