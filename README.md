@@ -101,7 +101,6 @@ spring:
 ```
 
 #### IntelliJ IDEA配置
-项目已包含`.idea/runConfigurations/Qingshu_Server.xml`配置文件：
 
 手动创建Spring Boot运行配置：
   - Main class: `org.qingshu.server.ServerApplication`
@@ -142,6 +141,7 @@ docker build -t vvnocode/qingshu-server:latest .
 docker push vvnocode/qingshu-server:latest
 
 # 运行容器
+# 强制拉取最新版本
 docker pull vvnocode/qingshu-server:latest
 docker-compose up -d
 ```
