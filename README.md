@@ -98,6 +98,7 @@ docker build -t vvnocode/qingshu-server:latest .
 docker push vvnocode/qingshu-server:latest
 
 # 运行容器
+docker pull vvnocode/qingshu-server:latest
 docker-compose up -d
 ```
 

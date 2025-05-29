@@ -33,6 +33,7 @@ public class OpenApiConfig {
                                 .name("MIT License")
                                 .url("https://opensource.org/licenses/MIT")))
                 .servers(List.of(
-                        new Server().url("http://localhost:52014").description("开发环境")));
+                        new Server().url("http://localhost:52014").description("开发环境"),
+                        new Server().url("https://api.qingshu.org").description("生产环境")));
     }
 }
