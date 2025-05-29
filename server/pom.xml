@@ -104,6 +104,7 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+            
             <!-- 打包 -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>

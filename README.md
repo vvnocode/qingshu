@@ -84,6 +84,23 @@ mvn spring-boot:run
 - **接口地址**: http://localhost:52014/v3/api-docs
 - **服务地址**: http://localhost:52014
 
+
+## Docker部署
+
+### 1. 手动构建Docker镜像
+确保您已经完成了项目的编译（生成了jar文件），然后在server目录下执行：
+
+```bash
+# 构建镜像
+docker build -t vvnocode/qingshu-server:latest .
+
+# 发布镜像
+docker push vvnocode/qingshu-server:latest
+
+# 运行容器
+docker run -d -p 52014:52014 --name qingshu-server vvnocode/qingshu-server:latest
+```
+
 ## 📚 API文档
 
 项目集成了Swagger，启动后可以通过以下地址查看完整的API文档：

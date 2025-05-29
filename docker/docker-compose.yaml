@@ -1,31 +1,37 @@
 services:
-  qingshu-server:
+  server:
     image: vvnocode/qingshu-server:latest
     container_name: qingshu-server
     ports:
       - "52014:52014"
     restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://${DB_HOST:-db}:${DB_PORT:-3306}/${DB_NAME:-qingshu}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-root}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-root}
     deploy:
       resources:
         limits:
           memory: 400M
         reservations:
           memory: 256M
+    depends_on:
+      - db
 
   # 使用MariaDB作为替代，低内存环境下更稳定
   db:
-    container_name: mysql
+    container_name: qingshu-mariadb
     image: mariadb:10.11
     command: [ '--character-set-server=utf8mb4', '--collation-server=utf8mb4_general_ci', '--innodb_buffer_pool_size=40M', '--performance_schema=OFF' ]
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: qingshu # 自动创建qingshu数据库
+      MYSQL_DATABASE: ${DB_NAME:-qingshu} # 自动创建qingshu数据库
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
     volumes:
-      - /appdata/mysql/mariadb/config:/etc/mysql/conf.d
-      - /appdata/mysql/mariadb/data:/var/lib/mysql
+      - /appdata/mariadb/config:/etc/mysql/conf.d
+      - /appdata/mariadb/data:/var/lib/mysql
     ports:
-      - 16954:3306
+      - "44638:3306"
     deploy:
       resources:
         limits:

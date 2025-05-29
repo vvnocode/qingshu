@@ -7,7 +7,7 @@ spring:
   
   # 数据源配置
   datasource:
-    url: jdbc:mariadb://localhost:16954/qingshu?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mariadb://localhost:3306/qingshu?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
     password: root
     driver-class-name: org.mariadb.jdbc.Driver
