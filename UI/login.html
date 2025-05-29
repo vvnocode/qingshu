@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 青书</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ff385c',
+                        secondary: '#5c67ff',
+                        dark: '#303030',
+                        light: '#fafafa'
+                    },
+                    fontFamily: {
+                        sans: ['PingFang SC', 'Microsoft YaHei', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #ffffff;
+            color: #303030;
+        }
+        .btn-primary {
+            background-color: #ff385c;
+            color: white;
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #e6324f;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px -2px rgba(255, 56, 92, 0.3);
+        }
+        .nav-item {
+            position: relative;
+        }
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -3px;
+            left: 0;
+            background-color: #ff385c;
+            transition: width 0.2s ease;
+        }
+        .nav-item.active::after,
+        .nav-item:hover::after {
+            width: 100%;
+        }
+        .form-input:focus {
+            border-color: #ff385c;
+            box-shadow: 0 0 0 2px rgba(255, 56, 92, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="bg-white py-3 shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2">
+                <span class="text-primary text-2xl"><i class="fas fa-heart"></i></span>
+                <span class="font-bold text-xl text-primary">青书</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="index.html" class="nav-item text-gray-700 hover:text-primary transition">首页</a>
+                <a href="create.html" class="nav-item text-gray-700 hover:text-primary transition">创作</a>
+                <a href="community.html" class="nav-item text-gray-700 hover:text-primary transition">社区</a>
+                <a href="discovery.html" class="nav-item text-gray-700 hover:text-primary transition">发现</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="login.html" class="text-primary font-medium">登录</a>
+                <a href="signup.html" class="btn-primary px-4 py-2 rounded-full text-sm">注册</a>
+                <button id="mobile-menu-btn" class="text-gray-700 md:hidden">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-100 mt-2">
+            <div class="container mx-auto px-4 py-2">
+                <a href="index.html" class="block py-2 text-gray-700 hover:text-primary">首页</a>
+                <a href="create.html" class="block py-2 text-gray-700 hover:text-primary">创作</a>
+                <a href="community.html" class="block py-2 text-gray-700 hover:text-primary">社区</a>
+                <a href="discovery.html" class="block py-2 text-gray-700 hover:text-primary">发现</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 登录表单 -->
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="py-8 px-6 sm:px-10">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800">欢迎回到青书</h2>
+                    <p class="text-gray-500 mt-2">登录你的账号，开启情感表达之旅</p>
+                </div>
+                
+                <form action="#" method="POST">
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">邮箱/手机号</label>
+                        <input id="email" name="email" type="text" autocomplete="email" required 
+                               class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                    </div>
+
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="password" class="block text-sm font-medium text-gray-700">密码</label>
+                            <a href="#" class="text-sm text-primary hover:underline">忘记密码?</a>
+                        </div>
+                        <div class="relative">
+                            <input id="password" name="password" type="password" autocomplete="current-password" required 
+                                   class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                            <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <button type="submit" class="btn-primary w-full py-3 rounded-lg text-base font-medium">
+                            登录
+                        </button>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <p class="text-gray-600">
+                            还没有账号? <a href="signup.html" class="text-primary font-medium hover:underline">立即注册</a>
+                        </p>
+                    </div>
+                </form>
+
+                <div class="mt-8">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-200"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-4 bg-white text-gray-500">或通过以下方式登录</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 grid grid-cols-3 gap-3">
+                        <button type="button" class="border border-gray-200 rounded-lg py-3 flex items-center justify-center hover:bg-gray-50">
+                            <i class="fab fa-weixin text-green-500 text-xl"></i>
+                        </button>
+                        <button type="button" class="border border-gray-200 rounded-lg py-3 flex items-center justify-center hover:bg-gray-50">
+                            <i class="fab fa-qq text-blue-500 text-xl"></i>
+                        </button>
+                        <button type="button" class="border border-gray-200 rounded-lg py-3 flex items-center justify-center hover:bg-gray-50">
+                            <i class="fab fa-weibo text-red-500 text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-white py-8 border-t border-gray-100 mt-auto">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <a href="index.html" class="flex items-center gap-2 mb-4">
+                        <span class="text-primary text-2xl"><i class="fas fa-heart"></i></span>
+                        <span class="font-bold text-xl text-primary">青书</span>
+                    </a>
+                    <p class="text-gray-500 max-w-xs">青书，为年轻人提供简单优雅的情感表达方式</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="font-bold mb-3">关于我们</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-500 hover:text-primary">青书介绍</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-primary">使用条款</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-primary">隐私政策</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold mb-3">帮助中心</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-500 hover:text-primary">常见问题</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-primary">使用指南</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-primary">联系我们</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold mb-3">关注我们</h3>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-gray-400 hover:text-primary text-xl">
+                                <i class="fab fa-weixin"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-primary text-xl">
+                                <i class="fab fa-weibo"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-primary text-xl">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 mt-8 pt-6 text-center text-gray-500 text-sm">
+                &copy; 2025 青书. 版权所有
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 移动端菜单控制
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 密码可见性切换
+        document.getElementById('toggle-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        });
+
+        // 确保所有链接可以点击
+        document.addEventListener('DOMContentLoaded', function() {
+            // 通过事件委托处理点击事件
+            document.body.addEventListener('click', function(e) {
+                let target = e.target;
+                
+                // 查找最近的a标签父元素
+                while (target && target !== document && target.tagName !== 'A') {
+                    target = target.parentNode;
+                }
+                
+                // 如果找到a标签，并且href不为空
+                if (target && target.tagName === 'A' && target.getAttribute('href')) {
+                    const href = target.getAttribute('href');
+                    if (href && href !== '#' && !href.startsWith('javascript')) {
+                        window.location.href = href;
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
