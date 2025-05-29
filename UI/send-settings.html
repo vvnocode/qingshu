@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置发送 - 青书</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ff385c',
+                        secondary: '#5c67ff',
+                        dark: '#303030',
+                        light: '#fafafa'
+                    },
+                    fontFamily: {
+                        sans: ['PingFang SC', 'Microsoft YaHei', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #ffffff;
+            color: #303030;
+        }
+
+        .btn-primary {
+            background-color: #ff385c;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #e6324f;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px -2px rgba(255, 56, 92, 0.3);
+        }
+
+        .card {
+            transition: all 0.2s ease;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -3px;
+            left: 0;
+            background-color: #ff385c;
+            transition: width 0.2s ease;
+        }
+
+        .nav-item.active::after,
+        .nav-item:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="bg-white py-3 shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2">
+                <span class="text-primary text-2xl"><i class="fas fa-heart"></i></span>
+                <span class="font-bold text-xl text-primary">青书</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="index.html" class="nav-item text-gray-700 hover:text-primary transition">首页</a>
+                <a href="create.html" class="nav-item active text-primary font-medium">创作</a>
+                <a href="community.html" class="nav-item text-gray-700 hover:text-primary transition">社区</a>
+                <a href="discovery.html" class="nav-item text-gray-700 hover:text-primary transition">发现</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="login.html" class="text-gray-700 hover:text-primary transition">登录</a>
+                <a href="signup.html" class="btn-primary px-4 py-2 rounded-full text-sm">注册</a>
+                <button id="mobile-menu-btn" class="text-gray-700 md:hidden">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-100 mt-2">
+            <div class="container mx-auto px-4 py-2">
+                <a href="index.html" class="block py-2 text-gray-700 hover:text-primary">首页</a>
+                <a href="create.html" class="block py-2 text-primary font-medium">创作</a>
+                <a href="community.html" class="block py-2 text-gray-700 hover:text-primary">社区</a>
+                <a href="discovery.html" class="block py-2 text-gray-700 hover:text-primary">发现</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 创作流程进度条 -->
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex justify-between mb-2 text-sm sm:text-base">
+            <div class="flex flex-col items-center">
+                <span class="text-gray-400">1. 选择模板</span>
+                <div class="w-4 h-4 bg-gray-400 rounded-full mt-2"></div>
+            </div>
+            <div class="flex flex-col items-center">
+                <span class="text-gray-400">2. 编辑内容</span>
+                <div class="w-4 h-4 bg-gray-400 rounded-full mt-2"></div>
+            </div>
+            <div class="flex flex-col items-center">
+                <span class="font-bold text-primary">3. 设置发送</span>
+                <div class="w-4 h-4 bg-primary rounded-full mt-2"></div>
+            </div>
+            <div class="flex flex-col items-center">
+                <span class="text-gray-400">4. 完成</span>
+                <div class="w-4 h-4 bg-gray-200 rounded-full mt-2"></div>
+            </div>
+        </div>
+        <div class="relative w-full bg-gray-200 h-1 rounded-full mt-2">
+            <div class="absolute top-0 left-0 bg-primary h-1 rounded-full w-3/4"></div>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <h1 class="text-2xl md:text-3xl font-bold mb-8 text-center">设置发送方式</h1>
+
+        <div class="max-w-2xl mx-auto space-y-6">
+            <!-- 收件人设置 -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h2 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-user-friends text-primary mr-2"></i>
+                    收件人设置
+                </h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">发送方式</label>
+                        <div class="space-y-3">
+                            <label class="flex items-center">
+                                <input type="radio" name="send_method" value="direct" class="text-primary" checked>
+                                <span class="ml-2">直接发送给TA</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="send_method" value="anonymous" class="text-primary">
+                                <span class="ml-2">匿名发送（TA不知道是谁发的）</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="send_method" value="link" class="text-primary">
+                                <span class="ml-2">生成链接分享</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="recipient-info">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">收件人信息</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" placeholder="收件人姓名"
+                                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <input type="email" placeholder="收件人邮箱"
+                                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 发送时间设置 -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h2 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-clock text-primary mr-2"></i>
+                    发送时间
+                </h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">发送选项</label>
+                        <div class="space-y-3">
+                            <label class="flex items-center">
+                                <input type="radio" name="send_time" value="now" class="text-primary" checked>
+                                <span class="ml-2">立即发送</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="send_time" value="schedule" class="text-primary">
+                                <span class="ml-2">定时发送</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="schedule-time" class="hidden">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">选择发送时间</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="date"
+                                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <input type="time"
+                                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">💡 建议选择对TA有特殊意义的时间，比如你们初次相遇的时间</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 隐私设置 -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h2 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-shield-alt text-primary mr-2"></i>
+                    隐私设置
+                </h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">分享到社区</label>
+                        <div class="space-y-3">
+                            <label class="flex items-center">
+                                <input type="radio" name="privacy" value="private" class="text-primary" checked>
+                                <span class="ml-2">私密（仅自己和收件人可见）</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="privacy" value="friends" class="text-primary">
+                                <span class="ml-2">仅限朋友可见</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="privacy" value="public" class="text-primary">
+                                <span class="ml-2">公开到社区（所有人可见，但隐藏真实姓名）</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-info-circle text-blue-500 mt-0.5 mr-2"></i>
+                            <div class="text-sm text-blue-700">
+                                <p class="font-medium mb-1">关于隐私保护</p>
+                                <p>如果选择公开到社区，我们会保护您的真实身份，只显示昵称。收件人信息始终保密。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 附加选项 -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h2 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-plus text-primary mr-2"></i>
+                    附加选项
+                </h2>
+
+                <div class="space-y-4">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="text-primary rounded">
+                        <span class="ml-2">发送成功后通知我</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" class="text-primary rounded">
+                        <span class="ml-2">允许收件人回复</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" class="text-primary rounded">
+                        <span class="ml-2">保存到我的情书集</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="flex justify-between pt-6">
+                <a href="create-editor.html"
+                    class="bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition">
+                    上一步
+                </a>
+                <button type="button" id="send-btn" class="btn-primary px-8 py-3 rounded-lg font-medium">
+                    确认发送
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-white py-8 border-t border-gray-100 mt-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <a href="index.html" class="flex items-center gap-2 mb-4">
+                        <span class="text-primary text-2xl"><i class="fas fa-heart"></i></span>
+                        <span class="font-bold text-xl text-primary">青书</span>
+                    </a>
+                    <p class="text-gray-500 max-w-xs">青书，为年轻人提供简单优雅的情感表达方式</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="font-bold mb-3">关于我们</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-500 hover:text-primary">青书介绍</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-primary">使用条款</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-primary">隐私政策</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold mb-3">帮助中心</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-500 hover:text-primary">常见问题</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-primary">使用指南</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-primary">联系我们</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold mb-3">关注我们</h3>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-gray-400 hover:text-primary text-xl">
+                                <i class="fab fa-weixin"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-primary text-xl">
+                                <i class="fab fa-weibo"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-primary text-xl">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 mt-8 pt-6 text-center text-gray-500 text-sm">
+                &copy; 2025 青书. 版权所有
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 移动端菜单控制
+        document.getElementById('mobile-menu-btn').addEventListener('click', function () {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 发送方式选择控制
+        document.querySelectorAll('input[name="send_method"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                const recipientInfo = document.getElementById('recipient-info');
+                if (this.value === 'link') {
+                    recipientInfo.style.display = 'none';
+                } else {
+                    recipientInfo.style.display = 'block';
+                }
+            });
+        });
+
+        // 发送时间选择控制
+        document.querySelectorAll('input[name="send_time"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                const scheduleTime = document.getElementById('schedule-time');
+                if (this.value === 'schedule') {
+                    scheduleTime.classList.remove('hidden');
+                } else {
+                    scheduleTime.classList.add('hidden');
+                }
+            });
+        });
+
+        // 确认发送按钮
+        document.getElementById('send-btn').addEventListener('click', function () {
+            // 这里可以添加表单验证和发送逻辑
+            alert('情书发送成功！TA会在指定时间收到你的心意。');
+            // 可以跳转到完成页面
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+
+</html>

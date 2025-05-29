@@ -95,13 +95,13 @@
             </div>
             
             <div class="flex items-center gap-3">
-                <div class="relative group">
-                    <button type="button" class="flex items-center gap-2 focus:outline-none">
+                <div class="relative">
+                    <button type="button" id="user-menu-btn" class="flex items-center gap-2 focus:outline-none">
                         <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="用户头像" class="w-8 h-8 rounded-full">
                         <span class="text-gray-700 hidden sm:block">小诗</span>
-                        <i class="fas fa-chevron-down text-gray-500 text-xs hidden sm:block"></i>
+                        <i class="fas fa-chevron-down text-gray-500 text-xs hidden sm:block transition-transform" id="user-menu-arrow"></i>
                     </button>
-                    <div class="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-10 hidden group-hover:block">
+                    <div id="user-menu" class="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-10 hidden">
                         <a href="profile.html" class="flex items-center px-4 py-2 text-gray-700 hover:bg-primary/5 hover:text-primary">
                             <i class="fas fa-user text-gray-400 w-5 mr-2"></i> 个人中心
                         </a>
@@ -500,6 +500,28 @@
         document.getElementById('mobile-menu-btn').addEventListener('click', function() {
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenu.classList.toggle('hidden');
+        });
+
+        // 用户菜单控制
+        document.getElementById('user-menu-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const userMenu = document.getElementById('user-menu');
+            const arrow = document.getElementById('user-menu-arrow');
+            
+            userMenu.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        });
+
+        // 点击其他地方关闭用户菜单
+        document.addEventListener('click', function(e) {
+            const userMenu = document.getElementById('user-menu');
+            const userMenuBtn = document.getElementById('user-menu-btn');
+            const arrow = document.getElementById('user-menu-arrow');
+            
+            if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
+                userMenu.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            }
         });
 
         // 确保所有链接可以点击

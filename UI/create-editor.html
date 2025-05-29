@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,44 +34,55 @@
             background-color: #ffffff;
             color: #303030;
         }
+
         .bg-primary {
             background-color: #ff385c;
         }
+
         .text-primary {
             color: #ff385c;
         }
+
         .btn-primary {
             background-color: #ff385c;
             color: white;
             transition: all 0.2s ease;
         }
+
         .btn-primary:hover {
             background-color: #e6324f;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px -2px rgba(255, 56, 92, 0.3);
         }
+
         .border-primary {
             border-color: #ff385c;
         }
+
         .editor-container {
             min-height: 400px;
             background-color: white;
         }
+
         #editor {
             height: 350px;
             font-size: 16px;
         }
+
         .ql-toolbar.ql-snow {
             border-radius: 0.5rem 0.5rem 0 0;
             border-color: #e5e7eb;
         }
+
         .ql-container.ql-snow {
             border-radius: 0 0 0.5rem 0.5rem;
             border-color: #e5e7eb;
         }
+
         .nav-item {
             position: relative;
         }
+
         .nav-item::after {
             content: '';
             position: absolute;
@@ -81,17 +93,21 @@
             background-color: #ff385c;
             transition: width 0.2s ease;
         }
+
         .nav-item.active::after,
         .nav-item:hover::after {
             width: 100%;
         }
+
         .deco-item {
             transition: all 0.2s ease;
         }
+
         .deco-item:hover {
             transform: scale(1.05);
             cursor: pointer;
         }
+
         @media (max-width: 640px) {
             #editor {
                 height: 280px;
@@ -99,6 +115,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="bg-white py-3 shadow-sm sticky top-0 z-50">
@@ -160,7 +177,7 @@
     <!-- 主要内容区 -->
     <div class="container mx-auto px-4 py-6">
         <h1 class="text-2xl md:text-3xl font-bold mb-8 text-center">创作你的情书</h1>
-        
+
         <div class="flex flex-col lg:flex-row gap-6">
             <!-- 编辑器部分 -->
             <div class="lg:w-2/3">
@@ -168,10 +185,12 @@
                     <div class="flex flex-col md:flex-row justify-between gap-4 mb-4">
                         <div class="flex-1">
                             <label for="title" class="block text-sm font-medium text-gray-700 mb-1">情书标题</label>
-                            <input type="text" id="title" name="title" placeholder="给心动的TA..." class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <input type="text" id="title" name="title" placeholder="给心动的TA..."
+                                class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
                         </div>
                         <div class="flex gap-2 items-end">
-                            <button class="bg-white border border-gray-300 rounded-full px-3 py-1.5 text-sm text-gray-700 flex items-center hover:border-primary hover:text-primary">
+                            <button
+                                class="bg-white border border-gray-300 rounded-full px-3 py-1.5 text-sm text-gray-700 flex items-center hover:border-primary hover:text-primary">
                                 <i class="fas fa-save mr-1"></i> 保存草稿
                             </button>
                             <button class="btn-primary rounded-full px-3 py-1.5 text-sm flex items-center">
@@ -179,10 +198,18 @@
                             </button>
                         </div>
                     </div>
-                    
+
                     <!-- 编辑器区域 -->
                     <div class="editor-container rounded-lg overflow-hidden border border-gray-200">
-                        <div id="editor"><p>亲爱的，</p><p><br></p><p>每天醒来，第一个想到的总是你。你的笑容，你的声音，你的一切，都让我感到无比幸福。</p><p><br></p><p>希望这封信能让你知道，在我心里，你是多么的重要。</p><p><br></p><p>爱你的我</p></div>
+                        <div id="editor">
+                            <p>亲爱的，</p>
+                            <p><br></p>
+                            <p>每天醒来，第一个想到的总是你。你的笑容，你的声音，你的一切，都让我感到无比幸福。</p>
+                            <p><br></p>
+                            <p>希望这封信能让你知道，在我心里，你是多么的重要。</p>
+                            <p><br></p>
+                            <p>爱你的我</p>
+                        </div>
                     </div>
                 </div>
 
@@ -192,7 +219,8 @@
                     <div class="mb-4">
                         <div class="flex flex-col sm:flex-row gap-3">
                             <div class="flex-grow">
-                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <select
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
                                     <option value="">选择一首浪漫的背景音乐</option>
                                     <option value="music1">《当爱已成往事》- 张学友</option>
                                     <option value="music2">《小酒窝》- 林俊杰/蔡卓妍</option>
@@ -205,7 +233,8 @@
                         </div>
                         <div class="mt-4">
                             <p class="text-sm text-gray-500 mb-2">或上传自己的音乐：</p>
-                            <input type="file" accept="audio/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:bg-opacity-20 file:text-primary hover:file:bg-opacity-30" />
+                            <input type="file" accept="audio/*"
+                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:bg-opacity-20 file:text-primary hover:file:bg-opacity-30" />
                         </div>
                     </div>
 
@@ -213,49 +242,57 @@
                     <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
                         <div class="deco-item text-center">
                             <div class="bg-primary bg-opacity-10 p-2 rounded-lg">
-                                <img src="https://cdn-icons-png.flaticon.com/512/1029/1029131.png" alt="装饰" class="w-10 h-10 mx-auto">
+                                <img src="https://cdn-icons-png.flaticon.com/512/1029/1029131.png" alt="装饰"
+                                    class="w-10 h-10 mx-auto">
                             </div>
                             <span class="text-xs mt-1 block">爱心</span>
                         </div>
                         <div class="deco-item text-center">
                             <div class="bg-primary bg-opacity-10 p-2 rounded-lg">
-                                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107957.png" alt="装饰" class="w-10 h-10 mx-auto">
+                                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107957.png" alt="装饰"
+                                    class="w-10 h-10 mx-auto">
                             </div>
                             <span class="text-xs mt-1 block">玫瑰花</span>
                         </div>
                         <div class="deco-item text-center">
                             <div class="bg-primary bg-opacity-10 p-2 rounded-lg">
-                                <img src="https://cdn-icons-png.flaticon.com/512/1689/1689464.png" alt="装饰" class="w-10 h-10 mx-auto">
+                                <img src="https://cdn-icons-png.flaticon.com/512/1689/1689464.png" alt="装饰"
+                                    class="w-10 h-10 mx-auto">
                             </div>
                             <span class="text-xs mt-1 block">丘比特</span>
                         </div>
                         <div class="deco-item text-center">
                             <div class="bg-primary bg-opacity-10 p-2 rounded-lg">
-                                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107809.png" alt="装饰" class="w-10 h-10 mx-auto">
+                                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107809.png" alt="装饰"
+                                    class="w-10 h-10 mx-auto">
                             </div>
                             <span class="text-xs mt-1 block">星星</span>
                         </div>
                         <div class="deco-item text-center">
                             <div class="bg-primary bg-opacity-10 p-2 rounded-lg">
-                                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107889.png" alt="装饰" class="w-10 h-10 mx-auto">
+                                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107889.png" alt="装饰"
+                                    class="w-10 h-10 mx-auto">
                             </div>
                             <span class="text-xs mt-1 block">花朵</span>
                         </div>
                         <div class="deco-item text-center">
                             <div class="bg-primary bg-opacity-10 p-2 rounded-lg">
-                                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107845.png" alt="装饰" class="w-10 h-10 mx-auto">
+                                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107845.png" alt="装饰"
+                                    class="w-10 h-10 mx-auto">
                             </div>
                             <span class="text-xs mt-1 block">气球</span>
                         </div>
                         <div class="deco-item text-center">
                             <div class="bg-primary bg-opacity-10 p-2 rounded-lg">
-                                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107883.png" alt="装饰" class="w-10 h-10 mx-auto">
+                                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107883.png" alt="装饰"
+                                    class="w-10 h-10 mx-auto">
                             </div>
                             <span class="text-xs mt-1 block">礼物</span>
                         </div>
                         <div class="deco-item text-center">
                             <div class="bg-primary bg-opacity-10 p-2 rounded-lg">
-                                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107952.png" alt="装饰" class="w-10 h-10 mx-auto">
+                                <img src="https://cdn-icons-png.flaticon.com/512/2107/2107952.png" alt="装饰"
+                                    class="w-10 h-10 mx-auto">
                             </div>
                             <span class="text-xs mt-1 block">信封</span>
                         </div>
@@ -264,10 +301,11 @@
 
                 <!-- 操作按钮 -->
                 <div class="flex justify-between mt-8 mb-6">
-                    <a href="create.html" class="bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50">
+                    <a href="create.html"
+                        class="bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50">
                         上一步
                     </a>
-                    <a href="#" class="btn-primary px-6 py-3 rounded-lg">
+                    <a href="send-settings.html" class="btn-primary px-6 py-3 rounded-lg">
                         下一步：设置发送
                     </a>
                 </div>
@@ -278,11 +316,12 @@
                 <!-- 模板样式选择 -->
                 <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-6">
                     <h2 class="text-xl font-bold mb-4">样式设置</h2>
-                    
+
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">主题色调</label>
                         <div class="flex space-x-2">
-                            <button class="w-8 h-8 bg-pink-400 rounded-full cursor-pointer border-2 border-white ring-2 ring-pink-400"></button>
+                            <button
+                                class="w-8 h-8 bg-pink-400 rounded-full cursor-pointer border-2 border-white ring-2 ring-pink-400"></button>
                             <button class="w-8 h-8 bg-red-400 rounded-full cursor-pointer"></button>
                             <button class="w-8 h-8 bg-purple-400 rounded-full cursor-pointer"></button>
                             <button class="w-8 h-8 bg-blue-400 rounded-full cursor-pointer"></button>
@@ -290,10 +329,11 @@
                             <button class="w-8 h-8 bg-yellow-400 rounded-full cursor-pointer"></button>
                         </div>
                     </div>
-                    
+
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">字体选择</label>
-                        <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <select
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
                             <option value="font1">默认字体</option>
                             <option value="font2">优雅手写体</option>
                             <option value="font3">古典宋体</option>
@@ -301,36 +341,43 @@
                             <option value="font5">可爱圆体</option>
                         </select>
                     </div>
-                    
+
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">背景选择</label>
                         <div class="grid grid-cols-3 gap-2">
                             <button class="h-16 rounded-lg border-2 border-primary bg-white"></button>
                             <button class="h-16 rounded-lg border bg-gray-50"></button>
                             <button class="h-16 rounded-lg border bg-pink-50"></button>
-                            <button class="h-16 rounded-lg border" style="background-image: url('https://images.unsplash.com/photo-1572248525483-6bedac1ab031?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80'); background-size: cover;"></button>
-                            <button class="h-16 rounded-lg border" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80'); background-size: cover;"></button>
-                            <button class="h-16 rounded-lg border" style="background-image: url('https://images.unsplash.com/photo-1520052203542-d3095f1b6cf0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80'); background-size: cover;"></button>
+                            <button class="h-16 rounded-lg border"
+                                style="background-image: url('https://images.unsplash.com/photo-1572248525483-6bedac1ab031?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80'); background-size: cover;"></button>
+                            <button class="h-16 rounded-lg border"
+                                style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80'); background-size: cover;"></button>
+                            <button class="h-16 rounded-lg border"
+                                style="background-image: url('https://images.unsplash.com/photo-1520052203542-d3095f1b6cf0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80'); background-size: cover;"></button>
                         </div>
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">信纸款式</label>
                         <div class="grid grid-cols-2 gap-2">
                             <button class="p-1 border rounded-lg hover:border-primary">
-                                <img src="https://i.imgur.com/dzlRu1C.png" alt="信纸样式" class="w-full h-20 object-cover rounded-lg">
+                                <img src="https://i.imgur.com/dzlRu1C.png" alt="信纸样式"
+                                    class="w-full h-20 object-cover rounded-lg">
                                 <div class="text-xs text-center mt-1">简约</div>
                             </button>
                             <button class="p-1 border rounded-lg hover:border-primary">
-                                <img src="https://i.imgur.com/KvF0J9b.png" alt="信纸样式" class="w-full h-20 object-cover rounded-lg">
+                                <img src="https://i.imgur.com/KvF0J9b.png" alt="信纸样式"
+                                    class="w-full h-20 object-cover rounded-lg">
                                 <div class="text-xs text-center mt-1">复古</div>
                             </button>
                             <button class="p-1 border rounded-lg hover:border-primary">
-                                <img src="https://i.imgur.com/Qn8DzRz.png" alt="信纸样式" class="w-full h-20 object-cover rounded-lg">
+                                <img src="https://i.imgur.com/Qn8DzRz.png" alt="信纸样式"
+                                    class="w-full h-20 object-cover rounded-lg">
                                 <div class="text-xs text-center mt-1">浪漫</div>
                             </button>
                             <button class="p-1 border rounded-lg hover:border-primary">
-                                <img src="https://i.imgur.com/KDsX0qq.png" alt="信纸样式" class="w-full h-20 object-cover rounded-lg">
+                                <img src="https://i.imgur.com/KDsX0qq.png" alt="信纸样式"
+                                    class="w-full h-20 object-cover rounded-lg">
                                 <div class="text-xs text-center mt-1">可爱</div>
                             </button>
                         </div>
@@ -423,22 +470,22 @@
         });
 
         // 移动端菜单控制
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+        document.getElementById('mobile-menu-btn').addEventListener('click', function () {
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenu.classList.toggle('hidden');
         });
 
         // 确保所有链接和按钮可以点击
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // 通过事件委托处理点击事件
-            document.body.addEventListener('click', function(e) {
+            document.body.addEventListener('click', function (e) {
                 let target = e.target;
-                
+
                 // 查找最近的a标签父元素
                 while (target && target !== document && target.tagName !== 'A') {
                     target = target.parentNode;
                 }
-                
+
                 // 如果找到a标签，并且href不为空
                 if (target && target.tagName === 'A' && target.getAttribute('href')) {
                     const href = target.getAttribute('href');
@@ -451,7 +498,7 @@
             // 颜色选择按钮
             const colorBtns = document.querySelectorAll('.bg-white.rounded-lg button[class*="bg-"]');
             colorBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     // 移除所有按钮的边框
                     colorBtns.forEach(b => {
                         b.classList.remove('border-2', 'border-white', 'ring-2');
@@ -462,10 +509,10 @@
                         if (b.classList.contains('ring-green-400')) b.classList.remove('ring-green-400');
                         if (b.classList.contains('ring-yellow-400')) b.classList.remove('ring-yellow-400');
                     });
-                    
+
                     // 设置当前按钮有边框
                     this.classList.add('border-2', 'border-white', 'ring-2');
-                    
+
                     // 根据背景色设置对应的环颜色
                     if (this.classList.contains('bg-pink-400')) this.classList.add('ring-pink-400');
                     if (this.classList.contains('bg-red-400')) this.classList.add('ring-red-400');
@@ -479,7 +526,7 @@
             // 装饰元素点击添加到编辑器
             const decoItems = document.querySelectorAll('.deco-item');
             decoItems.forEach(item => {
-                item.addEventListener('click', function() {
+                item.addEventListener('click', function () {
                     // 这里可以实现点击装饰时添加到编辑器的功能
                     alert('装饰元素将会添加到你的情书中');
                 });
@@ -487,4 +534,5 @@
         });
     </script>
 </body>
-</html> 
+
+</html>

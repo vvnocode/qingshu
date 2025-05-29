@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,28 +32,34 @@
             background-color: #ffffff;
             color: #303030;
         }
+
         .btn-primary {
             background-color: #ff385c;
             color: white;
             transition: all 0.2s ease;
         }
+
         .btn-primary:hover {
             background-color: #e6324f;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px -2px rgba(255, 56, 92, 0.3);
         }
+
         .card {
             transition: all 0.2s ease;
             border-radius: 12px;
             overflow: hidden;
         }
+
         .card:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
+
         .nav-item {
             position: relative;
         }
+
         .nav-item::after {
             content: '';
             position: absolute;
@@ -63,16 +70,19 @@
             background-color: #ff385c;
             transition: width 0.2s ease;
         }
+
         .nav-item.active::after,
         .nav-item:hover::after {
             width: 100%;
         }
+
         .tab-active {
             color: #ff385c;
             border-color: #ff385c;
         }
     </style>
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="bg-white py-3 shadow-sm sticky top-0 z-50">
@@ -87,23 +97,29 @@
                 <a href="community.html" class="nav-item text-gray-700 hover:text-primary transition">社区</a>
                 <a href="discovery.html" class="nav-item text-gray-700 hover:text-primary transition">发现</a>
             </div>
-            
+
             <div class="flex items-center gap-3">
-                <div class="relative group">
-                    <button type="button" class="flex items-center gap-2 focus:outline-none">
-                        <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="用户头像" class="w-8 h-8 rounded-full">
+                <div class="relative">
+                    <button type="button" id="user-menu-btn" class="flex items-center gap-2 focus:outline-none">
+                        <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="用户头像"
+                            class="w-8 h-8 rounded-full">
                         <span class="text-gray-700 hidden sm:block">小诗</span>
-                        <i class="fas fa-chevron-down text-gray-500 text-xs hidden sm:block"></i>
+                        <i class="fas fa-chevron-down text-gray-500 text-xs hidden sm:block transition-transform"
+                            id="user-menu-arrow"></i>
                     </button>
-                    <div class="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-10 hidden group-hover:block">
-                        <a href="profile.html" class="flex items-center px-4 py-2 text-gray-700 bg-primary/5 text-primary">
+                    <div id="user-menu"
+                        class="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-10 hidden">
+                        <a href="profile.html"
+                            class="flex items-center px-4 py-2 text-gray-700 bg-primary/5 text-primary">
                             <i class="fas fa-user text-primary w-5 mr-2"></i> 个人中心
                         </a>
-                        <a href="settings.html" class="flex items-center px-4 py-2 text-gray-700 hover:bg-primary/5 hover:text-primary">
+                        <a href="settings.html"
+                            class="flex items-center px-4 py-2 text-gray-700 hover:bg-primary/5 hover:text-primary">
                             <i class="fas fa-cog text-gray-400 w-5 mr-2"></i> 设置
                         </a>
                         <div class="border-t border-gray-100 my-1"></div>
-                        <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-primary/5 hover:text-primary">
+                        <a href="#"
+                            class="flex items-center px-4 py-2 text-gray-700 hover:bg-primary/5 hover:text-primary">
                             <i class="fas fa-sign-out-alt text-gray-400 w-5 mr-2"></i> 退出登录
                         </a>
                     </div>
@@ -133,8 +149,10 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
                 <div class="relative">
-                    <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="用户头像" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md">
-                    <button class="absolute bottom-0 right-0 bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md">
+                    <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="用户头像"
+                        class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md">
+                    <button
+                        class="absolute bottom-0 right-0 bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md">
                         <i class="fas fa-camera"></i>
                     </button>
                 </div>
@@ -148,7 +166,8 @@
                             <button class="btn-primary px-4 py-2 rounded-full text-sm flex items-center gap-1">
                                 <i class="fas fa-edit"></i> 编辑资料
                             </button>
-                            <a href="settings.html" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm flex items-center gap-1 hover:bg-gray-200 transition">
+                            <a href="settings.html"
+                                class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm flex items-center gap-1 hover:bg-gray-200 transition">
                                 <i class="fas fa-cog"></i> 设置
                             </a>
                         </div>
@@ -180,10 +199,14 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex overflow-x-auto">
                 <button class="tab-active py-3 px-4 font-medium text-center border-b-2 border-primary">我的情书</button>
-                <button class="text-gray-500 py-3 px-4 font-medium text-center border-b-2 border-transparent hover:text-primary hover:border-primary/30">收藏</button>
-                <button class="text-gray-500 py-3 px-4 font-medium text-center border-b-2 border-transparent hover:text-primary hover:border-primary/30">动态</button>
-                <button class="text-gray-500 py-3 px-4 font-medium text-center border-b-2 border-transparent hover:text-primary hover:border-primary/30">关注</button>
-                <button class="text-gray-500 py-3 px-4 font-medium text-center border-b-2 border-transparent hover:text-primary hover:border-primary/30">粉丝</button>
+                <button
+                    class="text-gray-500 py-3 px-4 font-medium text-center border-b-2 border-transparent hover:text-primary hover:border-primary/30">收藏</button>
+                <button
+                    class="text-gray-500 py-3 px-4 font-medium text-center border-b-2 border-transparent hover:text-primary hover:border-primary/30">动态</button>
+                <button
+                    class="text-gray-500 py-3 px-4 font-medium text-center border-b-2 border-transparent hover:text-primary hover:border-primary/30">关注</button>
+                <button
+                    class="text-gray-500 py-3 px-4 font-medium text-center border-b-2 border-transparent hover:text-primary hover:border-primary/30">粉丝</button>
             </div>
         </div>
     </div>
@@ -196,16 +219,19 @@
                 <button class="bg-primary text-white px-4 py-2 rounded-full text-sm">
                     全部
                 </button>
-                <button class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm hover:border-primary hover:text-primary">
+                <button
+                    class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm hover:border-primary hover:text-primary">
                     已发布
                 </button>
-                <button class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm hover:border-primary hover:text-primary">
+                <button
+                    class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm hover:border-primary hover:text-primary">
                     草稿
                 </button>
             </div>
             <div class="flex gap-3">
                 <div class="relative">
-                    <select class="appearance-none border border-gray-200 rounded-full px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white shadow-sm">
+                    <select
+                        class="appearance-none border border-gray-200 rounded-full px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white shadow-sm">
                         <option>最新创建</option>
                         <option>最早创建</option>
                         <option>点赞最多</option>
@@ -215,7 +241,8 @@
                         <i class="fas fa-chevron-down text-xs"></i>
                     </div>
                 </div>
-                <button class="bg-white border border-gray-200 text-gray-700 px-3 py-2 rounded-full flex items-center gap-1 hover:border-primary hover:text-primary">
+                <button
+                    class="bg-white border border-gray-200 text-gray-700 px-3 py-2 rounded-full flex items-center gap-1 hover:border-primary hover:text-primary">
                     <i class="fas fa-search"></i>
                     <span class="hidden sm:inline">搜索</span>
                 </button>
@@ -228,7 +255,7 @@
             <div class="card bg-white shadow">
                 <a href="create-editor.html" class="block">
                     <div class="relative h-40">
-                        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=800&auto=format&fit=crop" 
+                        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=800&auto=format&fit=crop"
                             alt="情书配图" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                             <div class="p-4 text-white">
@@ -251,10 +278,12 @@
                     </div>
                     <div class="flex justify-between">
                         <div class="flex gap-2">
-                            <button class="bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-xs hover:border-primary hover:text-primary">
+                            <button
+                                class="bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-xs hover:border-primary hover:text-primary">
                                 <i class="fas fa-edit mr-1"></i> 编辑
                             </button>
-                            <button class="bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-xs hover:border-primary hover:text-primary">
+                            <button
+                                class="bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-xs hover:border-primary hover:text-primary">
                                 <i class="fas fa-share-alt mr-1"></i> 分享
                             </button>
                         </div>
@@ -269,7 +298,7 @@
             <div class="card bg-white shadow">
                 <a href="create-editor.html" class="block">
                     <div class="relative h-40">
-                        <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=800&auto=format&fit=crop" 
+                        <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=800&auto=format&fit=crop"
                             alt="情书配图" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                             <div class="p-4 text-white">
@@ -292,10 +321,12 @@
                     </div>
                     <div class="flex justify-between">
                         <div class="flex gap-2">
-                            <button class="bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-xs hover:border-primary hover:text-primary">
+                            <button
+                                class="bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-xs hover:border-primary hover:text-primary">
                                 <i class="fas fa-edit mr-1"></i> 编辑
                             </button>
-                            <button class="bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-xs hover:border-primary hover:text-primary">
+                            <button
+                                class="bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-xs hover:border-primary hover:text-primary">
                                 <i class="fas fa-share-alt mr-1"></i> 分享
                             </button>
                         </div>
@@ -310,7 +341,7 @@
             <div class="card bg-white shadow">
                 <a href="create-editor.html" class="block">
                     <div class="relative h-40">
-                        <img src="https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                        <img src="https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                             alt="情书配图" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                             <div class="p-4 text-white">
@@ -333,7 +364,8 @@
                     </div>
                     <div class="flex justify-between">
                         <div class="flex gap-2">
-                            <button class="bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-xs hover:border-primary hover:text-primary">
+                            <button
+                                class="bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-xs hover:border-primary hover:text-primary">
                                 <i class="fas fa-edit mr-1"></i> 编辑
                             </button>
                             <button class="bg-primary text-white px-3 py-1.5 rounded-full text-xs hover:bg-primary/90">
@@ -348,7 +380,8 @@
             </div>
 
             <!-- 新建情书卡片 -->
-            <div class="card bg-white shadow border-2 border-dashed border-gray-200 flex items-center justify-center h-64">
+            <div
+                class="card bg-white shadow border-2 border-dashed border-gray-200 flex items-center justify-center h-64">
                 <a href="create.html" class="text-center p-6 hover:text-primary transition">
                     <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-plus text-primary text-xl"></i>
@@ -428,22 +461,44 @@
     <!-- JavaScript -->
     <script>
         // 移动端菜单控制
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+        document.getElementById('mobile-menu-btn').addEventListener('click', function () {
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenu.classList.toggle('hidden');
         });
 
+        // 用户菜单控制
+        document.getElementById('user-menu-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const userMenu = document.getElementById('user-menu');
+            const arrow = document.getElementById('user-menu-arrow');
+            
+            userMenu.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        });
+
+        // 点击其他地方关闭用户菜单
+        document.addEventListener('click', function(e) {
+            const userMenu = document.getElementById('user-menu');
+            const userMenuBtn = document.getElementById('user-menu-btn');
+            const arrow = document.getElementById('user-menu-arrow');
+            
+            if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
+                userMenu.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            }
+        });
+
         // 确保所有链接可以点击
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // 通过事件委托处理点击事件
-            document.body.addEventListener('click', function(e) {
+            document.body.addEventListener('click', function (e) {
                 let target = e.target;
-                
+
                 // 查找最近的a标签父元素
                 while (target && target !== document && target.tagName !== 'A') {
                     target = target.parentNode;
                 }
-                
+
                 // 如果找到a标签，并且href不为空
                 if (target && target.tagName === 'A' && target.getAttribute('href')) {
                     const href = target.getAttribute('href');
@@ -456,7 +511,7 @@
             // 为所有选项卡按钮添加点击事件
             const tabButtons = document.querySelectorAll('.bg-white.border-t.border-b button');
             tabButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     // 移除所有按钮的active状态
                     tabButtons.forEach(b => {
                         b.classList.remove('tab-active');
@@ -470,4 +525,5 @@
         });
     </script>
 </body>
-</html> 
+
+</html>

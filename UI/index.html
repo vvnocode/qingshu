@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,27 +32,33 @@
             background-color: #ffffff;
             color: #303030;
         }
+
         .btn-primary {
             background: #ff385c;
             transition: all 0.2s ease;
         }
+
         .btn-primary:hover {
             background: #e6324f;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px -2px rgba(255, 56, 92, 0.3);
         }
+
         .card {
             transition: all 0.2s ease;
             border-radius: 12px;
             overflow: hidden;
         }
+
         .card:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
+
         .nav-item {
             position: relative;
         }
+
         .nav-item::after {
             content: '';
             position: absolute;
@@ -62,10 +69,12 @@
             background-color: #ff385c;
             transition: width 0.2s ease;
         }
+
         .nav-item.active::after,
         .nav-item:hover::after {
             width: 100%;
         }
+
         @media (max-width: 640px) {
             .feature-card {
                 padding: 1rem;
@@ -73,6 +82,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="bg-white py-3 shadow-sm sticky top-0 z-50">
@@ -81,16 +91,17 @@
                 <span class="text-primary text-2xl"><i class="fas fa-heart"></i></span>
                 <span class="font-bold text-xl text-primary">青书</span>
             </a>
-            
+
             <div class="hidden md:flex items-center gap-8">
                 <a href="index.html" class="nav-item active text-primary font-medium">首页</a>
                 <a href="create.html" class="nav-item text-gray-700 hover:text-primary transition">创作</a>
                 <a href="community.html" class="nav-item text-gray-700 hover:text-primary transition">社区</a>
                 <a href="discovery.html" class="nav-item text-gray-700 hover:text-primary transition">发现</a>
             </div>
-            
+
             <div class="flex items-center gap-4">
-                <a href="create.html" class="btn-primary text-white px-5 py-2 rounded-full text-sm font-medium hidden md:block">
+                <a href="create.html"
+                    class="btn-primary text-white px-5 py-2 rounded-full text-sm font-medium hidden md:block">
                     写情书
                 </a>
                 <a href="login.html" class="text-gray-700 hover:text-primary transition">登录</a>
@@ -115,10 +126,10 @@
     <section class="relative overflow-hidden py-12 md:py-20">
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-r from-pink-50 to-blue-50 opacity-70"></div>
-            <img src="https://images.unsplash.com/photo-1565843714144-d5a3292ae82d?q=80&w=1920&auto=format&fit=crop" 
-                 alt="背景" class="w-full h-full object-cover object-center">
+            <img src="https://images.unsplash.com/photo-1565843714144-d5a3292ae82d?q=80&w=1920&auto=format&fit=crop"
+                alt="背景" class="w-full h-full object-cover object-center">
         </div>
-        
+
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="max-w-2xl mx-auto text-center">
                 <h1 class="text-3xl md:text-4xl font-bold mb-4 leading-tight">
@@ -126,10 +137,12 @@
                 </h1>
                 <p class="text-lg mb-6 text-gray-700">精致情书模板，让爱有温度，给青春一份浪漫回忆</p>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <a href="create.html" class="btn-primary text-white px-6 py-3 rounded-full text-base font-medium shadow-md">
+                    <a href="create.html"
+                        class="btn-primary text-white px-6 py-3 rounded-full text-base font-medium shadow-md">
                         立即开始
                     </a>
-                    <a href="#features" class="bg-white text-primary border border-primary px-6 py-3 rounded-full text-base font-medium shadow-sm">
+                    <a href="#features"
+                        class="bg-white text-primary border border-primary px-6 py-3 rounded-full text-base font-medium shadow-sm">
                         了解更多
                     </a>
                 </div>
@@ -149,13 +162,13 @@
                     查看全部 <i class="fas fa-chevron-right ml-1 text-xs"></i>
                 </a>
             </div>
-            
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 <!-- 模板卡片1 -->
                 <div class="card bg-white shadow">
                     <a href="create.html" class="block">
                         <div class="relative h-48 sm:h-52">
-                            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=800&auto=format&fit=crop" 
+                            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=800&auto=format&fit=crop"
                                 alt="情书模板" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                                 <div class="p-4 text-white">
@@ -176,12 +189,12 @@
                         </div>
                     </a>
                 </div>
-                
+
                 <!-- 模板卡片2 -->
                 <div class="card bg-white shadow">
                     <a href="create.html" class="block">
                         <div class="relative h-48 sm:h-52">
-                            <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=800&auto=format&fit=crop" 
+                            <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=800&auto=format&fit=crop"
                                 alt="情书模板" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                                 <div class="p-4 text-white">
@@ -202,12 +215,12 @@
                         </div>
                     </a>
                 </div>
-                
+
                 <!-- 模板卡片3 -->
                 <div class="card bg-white shadow">
                     <a href="create.html" class="block">
                         <div class="relative h-48 sm:h-52">
-                            <img src="https://images.unsplash.com/photo-1579208575657-c595a05383b7?q=80&w=800&auto=format&fit=crop" 
+                            <img src="https://images.unsplash.com/photo-1579208575657-c595a05383b7?q=80&w=800&auto=format&fit=crop"
                                 alt="情书模板" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                                 <div class="p-4 text-white">
@@ -239,7 +252,7 @@
                 <h2 class="text-2xl font-bold">青书特色</h2>
                 <p class="text-gray-500 mt-1">简单几步，传递你的心意</p>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div class="feature-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center text-center">
                     <div class="w-12 h-12 btn-primary rounded-full flex items-center justify-center mb-4">
@@ -248,7 +261,7 @@
                     <h3 class="text-lg font-bold mb-2">匿名告白</h3>
                     <p class="text-gray-600">不敢当面表白？匿名传递你的心意，让感情先行一步</p>
                 </div>
-                
+
                 <div class="feature-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center text-center">
                     <div class="w-12 h-12 btn-primary rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-palette text-white text-lg"></i>
@@ -256,7 +269,7 @@
                     <h3 class="text-lg font-bold mb-2">精美装帧</h3>
                     <p class="text-gray-600">多种情书模板与装帧，让你的表白更加特别</p>
                 </div>
-                
+
                 <div class="feature-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center text-center">
                     <div class="w-12 h-12 btn-primary rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-clock text-white text-lg"></i>
@@ -280,12 +293,13 @@
                     进入社区 <i class="fas fa-chevron-right ml-1 text-xs"></i>
                 </a>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <!-- 故事卡片1 -->
                 <div class="card bg-white shadow p-5">
                     <div class="flex items-center mb-4">
-                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="用户头像" class="w-10 h-10 rounded-full">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="用户头像"
+                            class="w-10 h-10 rounded-full">
                         <div class="ml-3">
                             <div class="font-medium">小鱼儿</div>
                             <div class="text-xs text-gray-500">3天前</div>
@@ -306,11 +320,12 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 故事卡片2 -->
                 <div class="card bg-white shadow p-5">
                     <div class="flex items-center mb-4">
-                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="用户头像" class="w-10 h-10 rounded-full">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="用户头像"
+                            class="w-10 h-10 rounded-full">
                         <div class="ml-3">
                             <div class="font-medium">星辰大海</div>
                             <div class="text-xs text-gray-500">昨天</div>
@@ -330,37 +345,6 @@
                             <span>76</span>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 下载APP区域 -->
-    <section class="py-10 bg-gray-50">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="md:w-1/2 mb-8 md:mb-0">
-                    <h2 class="text-2xl font-bold mb-3">随时随地，表达心意</h2>
-                    <p class="text-gray-700 mb-5">下载青书APP，更多独家模板和功能等你体验</p>
-                    <div class="flex flex-wrap gap-3">
-                        <a href="#" class="bg-black text-white px-5 py-2 rounded-xl flex items-center">
-                            <i class="fab fa-apple text-xl mr-2"></i>
-                            <div>
-                                <div class="text-xs">下载</div>
-                                <div class="font-medium">App Store</div>
-                            </div>
-                        </a>
-                        <a href="#" class="bg-black text-white px-5 py-2 rounded-xl flex items-center">
-                            <i class="fab fa-google-play text-xl mr-2"></i>
-                            <div>
-                                <div class="text-xs">下载</div>
-                                <div class="font-medium">Google Play</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="md:w-1/2 flex justify-center md:justify-end">
-                    <img src="https://i.imgur.com/JVLZKyh.png" alt="APP预览" class="w-56 rounded-xl shadow-lg">
                 </div>
             </div>
         </div>
@@ -419,22 +403,22 @@
     <!-- JavaScript -->
     <script>
         // 移动端菜单控制
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+        document.getElementById('mobile-menu-btn').addEventListener('click', function () {
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenu.classList.toggle('hidden');
         });
 
         // 确保所有链接可以点击
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // 通过事件委托处理点击事件
-            document.body.addEventListener('click', function(e) {
+            document.body.addEventListener('click', function (e) {
                 let target = e.target;
-                
+
                 // 查找最近的a标签父元素
                 while (target && target !== document && target.tagName !== 'A') {
                     target = target.parentNode;
                 }
-                
+
                 // 如果找到a标签，并且href不为空
                 if (target && target.tagName === 'A' && target.getAttribute('href')) {
                     const href = target.getAttribute('href');
@@ -446,4 +430,5 @@
         });
     </script>
 </body>
-</html> 
+
+</html>
