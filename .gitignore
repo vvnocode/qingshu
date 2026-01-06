@@ -1,0 +1,30 @@
+# =====================
+# Hugo 构建产物
+# =====================
+public/
+resources/
+
+# Hugo 构建锁文件（Cloudflare / CI 会自动生成）
+.hugo_build.lock
+
+# =====================
+# Obsidian 本地配置
+# =====================
+.obsidian/
+.trash/
+
+# =====================
+# 操作系统 / 编辑器杂项
+# =====================
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+
+# =====================
+# Node / Go（如果将来用到）
+# =====================
+node_modules/
+go.sum
