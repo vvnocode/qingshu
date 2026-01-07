@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://qingshu.org/'
 languageCode = 'zh-cn'
 title = 'qingshu'
 theme = 'PaperMod'

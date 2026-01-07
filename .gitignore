@@ -23,6 +23,9 @@ Thumbs.db
 .vscode/
 !.vscode/extensions.json
 
+# IDEA
+.idea
+
 # =====================
 # Node / Go（如果将来用到）
 # =====================
