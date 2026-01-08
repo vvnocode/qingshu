@@ -1,0 +1,13 @@
+{{- $dest := .Destination -}}
+
+{{- /* 把 Obsidian/插件生成的 static/images/... 映射成 /images/... */ -}}
+{{- if hasPrefix $dest "static/images/" -}}
+  {{- $dest = replace $dest "static/images/" "/images/" -}}
+{{- end -}}
+
+{{- /* 如果已经是 images/...（没带 /），也统一补成 /images/... */ -}}
+{{- if and (hasPrefix $dest "images/") (not (hasPrefix $dest "/")) -}}
+  {{- $dest = printf "/%s" $dest -}}
+{{- end -}}
+
+<img src="{{ $dest | relURL }}" alt="{{ .Text }}" {{ with .Title }}title="{{ . }}"{{ end }}>
