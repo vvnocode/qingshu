@@ -43,19 +43,19 @@ Java存储字节码使用UTF-8节省处理字符串所占用，运行使用UTF-1
 
 英语字母等需要1个字节，1个汉字对应2个字节。
 
-![image.png](9ebdbb28d7b03562040f3efaf630dc62_MD5.png)
+![image.png](/static/images/9ebdbb28d7b03562040f3efaf630dc62_MD5.png)
 
 ### UTF-16 编码
 
 code unit为2个字节，英语字母等需要2个字节，中文需要2|4字节。
 
-![image.png](6494a79fad3d9c6c5de7b079afabab4b_MD5.png)
+![image.png](/static/images/6494a79fad3d9c6c5de7b079afabab4b_MD5.png)
 
 ### UTF-8 编码
 
 code unit为1个字节，英文等字母需要一个字节，中文变为3|4个字节。
 
-![image.png](dbf0cecdfa1330791b45748698c05f5e_MD5.png)
+![image.png](/static/images/dbf0cecdfa1330791b45748698c05f5e_MD5.png)
 
 ## 乱码
 
@@ -73,7 +73,7 @@ System.out.println(isoStr);
 
 编码过程如下图所示。
 
-![](ae8a49d512e1fd4ba1515cf446f20495_MD5.png)
+![](/static/images/ae8a49d512e1fd4ba1515cf446f20495_MD5.png)
 
 ### 一个汉字变成一个问号
 
@@ -89,13 +89,13 @@ System.out.println(isoStr);
 
 编码过程如下图所示。
 
-![image.png](e1cae50164415dfafc2fa80875317af8_MD5.png)
+![image.png](/static/images/e1cae50164415dfafc2fa80875317af8_MD5.png)
 
 ### 一个汉字变成两个问号
 
 例如，字符串“淘！我喜欢！”变成了“？？？？？？？？？？？？”编码过程如下图所示。
 
-![image.png](0d0265e381b69baea1f5a305623d48cf_MD5.png)
+![image.png](/static/images/0d0265e381b69baea1f5a305623d48cf_MD5.png)
 
 ## SpringBoot中的乱码
 
