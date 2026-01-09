@@ -2,3 +2,65 @@ baseURL = 'https://qingshu.org/'
 languageCode = 'zh-cn'
 title = 'qingshu'
 theme = 'PaperMod'
+
+# 分页设置
+[pagination]
+  pagerSize = 10
+
+[params]
+  # 默认主题：auto, light, dark
+  defaultTheme = "dark"
+  # 显示阅读时间
+  ShowReadingTime = true
+  # 显示分享按钮
+  ShowShareButtons = false
+  # 显示文章导航（上一篇/下一篇）
+  ShowPostNavLinks = true
+  # 显示面包屑导航
+  ShowBreadCrumbs = false
+  # 显示代码复制按钮
+  ShowCodeCopyButtons = true
+  # 显示目录
+  ShowToc = true
+
+  # homeInfoParams 模式：首页显示欢迎信息 + 文章列表
+  [params.homeInfoParams]
+    Title = "qingshu"
+    Content = """
+🌱 青书一卷，记录成长。
+
+书写技术之路的思考与感悟。
+"""
+
+  # 封面图设置
+  [params.cover]
+    hidden = false
+    hiddenInList = false
+    hiddenInSingle = false
+
+# 菜单配置
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "文章"
+    url = "/posts/"
+    weight = 10
+  [[menu.main]]
+    identifier = "archives"
+    name = "归档"
+    url = "/archives/"
+    weight = 20
+  [[menu.main]]
+    identifier = "tags"
+    name = "标签"
+    url = "/tags/"
+    weight = 30
+  [[menu.main]]
+    identifier = "search"
+    name = "搜索"
+    url = "/search/"
+    weight = 40
+
+# 输出格式（搜索功能需要）
+[outputs]
+  home = ["HTML", "RSS", "JSON"]

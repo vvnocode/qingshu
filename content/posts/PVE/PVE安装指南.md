@@ -4,7 +4,10 @@ draft = false
 title = 'PVE安装指南'
 tags = ['PVE', 'Proxmox', '虚拟化', 'Linux']
 +++
-换源 https://skyao.net/learning-pve/docs/installation/source/#pve9
+
+## 换源
+
+https://skyao.net/learning-pve/docs/installation/source/#pve9
 
 ## 下载镜像
 
