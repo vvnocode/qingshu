@@ -2,6 +2,7 @@
 date = '2025-01-22T21:57:04+08:00'
 draft = false
 title = 'Java基础集合多线程JVM'
+tags = ['Java', '集合', '多线程', 'JVM', '面试']
 +++
 ## Java基础
 

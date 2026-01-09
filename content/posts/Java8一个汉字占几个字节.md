@@ -2,6 +2,7 @@
 date = '2025-01-07T10:34:04+08:00'
 draft = false
 title = 'Java8一个汉字占几个字节'
+tags = ['Java', '编码', 'UTF-8', 'UTF-16']
 +++
 ## 总结
 
