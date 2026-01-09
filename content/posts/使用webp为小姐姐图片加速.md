@@ -62,7 +62,7 @@ server {
 ```
 
 
-![image-20231216212027385](static/images/ac09b3a92245f4a70ae509564a7ea3ef_MD5.jpg)
+![image-20231216212027385](static/images/2026/01/ac09b3a92245f4a70ae509564a7ea3ef_MD5.jpg)
 
 
 
@@ -70,7 +70,7 @@ webp-server -prefetch -jobs=12 --config=/etc/config.json
 
 > 有问题
 
-![image-20231217155151654](static/images/356ed5334ef3a30d6aa61f4b03d5c315_MD5.jpg)
+![image-20231217155151654](static/images/2026/01/356ed5334ef3a30d6aa61f4b03d5c315_MD5.jpg)
 
 ### 参考
 

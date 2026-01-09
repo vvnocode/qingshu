@@ -10,7 +10,7 @@ tags = ['Docker', 'Linux', '运维', '故障排查']
 生产环境虚拟机磁盘告警，使用率达到 94%，需要排查占用空间的文件并进行清理。
 
 <!-- 截图：df -h 输出，显示磁盘使用 94% -->
-![](static/images/ead21a313e230d22001b2787f4069e22_MD5.jpg)
+![](static/images/2026/01/ead21a313e230d22001b2787f4069e22_MD5.jpg)
 
 ## 环境信息
 
@@ -19,7 +19,7 @@ tags = ['Docker', 'Linux', '运维', '故障排查']
 - 主要服务：GitLab、MySQL、Redis、Nexus3、SkyWalking 等（均运行在 Docker 中）
 
 <!-- 截图：docker ps 显示运行中的容器 -->
-![](static/images/c5cd3ec63e1ced79720dfd39a39d84df_MD5.jpg)
+![](static/images/2026/01/c5cd3ec63e1ced79720dfd39a39d84df_MD5.jpg)
 
 ## 排查过程
 

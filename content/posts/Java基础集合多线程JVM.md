@@ -21,7 +21,7 @@ tags = ['Java', '集合', '多线程', 'JVM', '面试']
 >  重写发生在运行时。因为在编译时，编译器是无法知道我们到底是调用父类的方法还是子类的方法，相反的，只有在实际运行的时候，我们才知道应该调用哪个方法。
 >
 >  重载发生在编译时。在编译过程中，编译器必须根据参数类型以及长度来确定到底是调用的哪个方法，这也是Java编译时多态的体现。
->  ![|450](static/images/776b766f3bc1638b467f321f2563aa47_MD5.jpg)
+>  ![|450](static/images/2026/01/776b766f3bc1638b467f321f2563aa47_MD5.jpg)
 
 ####  Java 面向对象编程三大特性: 封装 继承 多态 
 
@@ -114,15 +114,15 @@ StringBuffer/StringBuilder 每次都会对**对象本身进行操作**，而不�
 
 #### 线程有哪些基本状态?
 
- ![](images/2cfadd8c57335233533bec1b23c3fb26_MD5.jpg)
+ ![](static/images/2026/01/2cfadd8c57335233533bec1b23c3fb26_MD5.jpg)
 
 
  
-![](images/215f2bbdb85b1d883fc83dd07e3f734a_MD5.jpg)
+![](static/images/2026/01/215f2bbdb85b1d883fc83dd07e3f734a_MD5.jpg)
 
 #### Java 中的异常处理
 
-![](images/94aea0eff31ce3a307606dcd4d936659_MD5.jpg)
+![](static/images/2026/01/94aea0eff31ce3a307606dcd4d936659_MD5.jpg)
  
 #### 什么情况下finally不会执行
 
@@ -245,7 +245,7 @@ NullPointerException 。
 
 > HashSet 底层就是基于 HashMap 实现的。 （ HashSet 的源码非常非常少，因为除了 clone() 、 writeObject() 、 readObject() 是 HashSet 自己不得不实现之外，其他方法都是直接调用 HashMap 中的方法。 
 
-![](images/e1e721fde1fd483c2f7a4eb0a024b52f_MD5.jpg)
+![](static/images/2026/01/e1e721fde1fd483c2f7a4eb0a024b52f_MD5.jpg)
 
 ####  HashMap的底层实现
 
@@ -535,7 +535,7 @@ CPU 缓存则是为了解决 CPU 处理速度和内存处理速度不对等的�
 
 - 最终的变量是放在了当前线程的 ThreadLocalMap 中。ThreadLoal对象为key，如果有多个ThreadLoal对象，就有多个key。
 
-![|400](images/d8500be8c4635c92b9385933154bb428_MD5.jpg)
+![|400](static/images/2026/01/d8500be8c4635c92b9385933154bb428_MD5.jpg)
 
 #### ThreadLocal 内存泄露问题了解不？ 
 
@@ -616,7 +616,7 @@ Runnable 接口不会返回结果或抛出检查异常，但是 Callable 接口�
 
 > 图只是一个大概，具体还是要去看execute源码
 
-![|425](images/b6732d184968022809d022d8cf646e35_MD5.jpg)
+![|425](static/images/2026/01/b6732d184968022809d022d8cf646e35_MD5.jpg)
 
 ####  介绍一下 Atomic 原子类
 
@@ -793,7 +793,7 @@ AQS 使用一个 int 成员变量来表示同步状态，通过内置的 FIFO �
 
    对象所需的内存⼤小在类加载完成后便可确定，为对象分配空间的任务等同于把一块确定⼤小的内存从 Java 堆中划分出来。分配方式有 “指针碰撞” 和 “空闲列表” 两种，选择哪种分配方式由 Java 堆是否规整决定，而Java 堆是否规整又由所采用的垃圾收集器是否带有压缩整理功能（ GC 收集器的算法是标记-整理算法、复制算法；标记-清除算法不带压缩整理）决定。 
 
-   ![1638866276157](images/2a65cd9a07b603afdcdef0eb7889bf9e_MD5.jpg)   
+   ![1638866276157](static/images/2026/01/2a65cd9a07b603afdcdef0eb7889bf9e_MD5.jpg)   
 
    PS：内存分配并发问题
 
@@ -820,12 +820,12 @@ Java程序通过栈上的 reference 数据来操作堆上的具体对象。两�
 
   如果使用句柄的话，那么 Java 堆中将会划分出一块内存来作为句柄池，reference 中存储的就是对象的句柄地址，而句柄中包含了对象实例数据与类型数据各自的具体地址信息； 
 
-   ![](images/8fbe620ef3ce244ef41e78bdb0b384c9_MD5.jpg)
+   ![](static/images/2026/01/8fbe620ef3ce244ef41e78bdb0b384c9_MD5.jpg)
 
 - 直接指针
 
   如果使用直接指针访问，那么 Java 堆对象的布局中就必须考虑如何放置访问类型数据的相关信息，而 reference 中存储的直接就是对象的地址。 
-  ![](images/093c7de6943e276c79f9ecc6c76d33ef_MD5.jpg)
+  ![](static/images/2026/01/093c7de6943e276c79f9ecc6c76d33ef_MD5.jpg)
 
 #### 简单聊聊JVM的内存分配和回收
 
@@ -836,7 +836,7 @@ Java程序通过栈上的 reference 数据来操作堆上的具体对象。两�
 - 堆回收
 
   堆是GC回收的主要区域。大多对象在Eden创建，当Eden没有足够的空间分配时，会进行一次新生代回收，Minor GC 将存活的对象复制到Survivor0，然后Eden被清空。当Eden再次没有足够的空间分配时，Minor GC 将Eden和Survivor0存活的对象复制到Survivor1，清空Eden和Survivor0。然后Survivor1和Survivor0交换角色，下次 Minor GC 将存活的对象放到Survivor0中。每次 Minor GC 都会将存活的对象年龄+1，达到15或者通过动态对象年龄判定，这个年龄的及以上的全部拷贝到老年代并删除新生代中的数据。
-	![](images/844d91bd6ed92f346177c573e7afccc2_MD5.jpg)
+	![](static/images/2026/01/844d91bd6ed92f346177c573e7afccc2_MD5.jpg)
 
 #### 说一下堆内存中对象的分配的基本策略
 
@@ -965,7 +965,7 @@ Java程序通过栈上的 reference 数据来操作堆上的具体对象。两�
 
 #### 经典垃圾收集器
 
-![|325](images/92505543de1343531e6d421745695a45_MD5.jpg)
+![|325](static/images/2026/01/92505543de1343531e6d421745695a45_MD5.jpg)
 
 - Serial收集器（新生代）
 
@@ -975,7 +975,7 @@ Java程序通过栈上的 reference 数据来操作堆上的具体对象。两�
 
   - 简单高效、适用于客户端模式下的虚拟机。
 
-  ![](images/47671526e390f537a15e3f000da45d9e_MD5.jpg)
+  ![](static/images/2026/01/47671526e390f537a15e3f000da45d9e_MD5.jpg)
 
 - ParNew收集器（新生代）
 
@@ -984,7 +984,7 @@ Java程序通过栈上的 reference 数据来操作堆上的具体对象。两�
 
   - 除了Serial收集器外，目前只有它能与CMS收集器配合工作。
 
-  ![](images/9de5e53b4f477e1a93df3ad0bf2d1492_MD5.jpg)
+  ![](static/images/2026/01/9de5e53b4f477e1a93df3ad0bf2d1492_MD5.jpg)
 
 - Parallel Scavenge收集器（新生代）
 
@@ -1001,7 +1001,7 @@ Java程序通过栈上的 reference 数据来操作堆上的具体对象。两�
   - 简单高效、适用于客户端模式下的虚拟机。
   - 用途：一种是在JDK 5以及之前的版本中与Parallel Scavenge收集器搭配使用[插图]，另外一种就是作为CMS收集器发生失败时的后备预案，在并发收集发生Concurrent Mode Failure时使用。
 
-  ![](images/00c9ed2892ece67ea72ed3a62c40ea08_MD5.jpg)
+  ![](static/images/2026/01/00c9ed2892ece67ea72ed3a62c40ea08_MD5.jpg)
 
 - Parallel Old收集器（老年代）
 
@@ -1010,7 +1010,7 @@ Java程序通过栈上的 reference 数据来操作堆上的具体对象。两�
   - 在注重吞吐量或者处理器资源较为稀缺的场合，都可以优先考虑Parallel Scavenge加Parallel Old收集器这个组合。
   - JDK1.8默认
 
-  ![](images/769e065c7de5e191710f864fade21526_MD5.jpg)
+  ![](static/images/2026/01/769e065c7de5e191710f864fade21526_MD5.jpg)
 
 - CMS收集器（老年代）
 
@@ -1034,7 +1034,7 @@ Java程序通过栈上的 reference 数据来操作堆上的具体对象。两�
     - ⽆法处理浮动垃圾（在CMS的并发标记和并发清理阶段，用户线程是还在继续运行的，程序在运行自然就还会伴随有新的垃圾对象不断产生）；
     - 它使用的回收算法-“标记-清除”算法会导致收集结束时会有⼤量空间碎⽚产生。 
 
-  ![](images/5871be9d33eee6999178a11f8320bb96_MD5.jpg)
+  ![](static/images/2026/01/5871be9d33eee6999178a11f8320bb96_MD5.jpg)
 
 - Garbage First收集器（G1）
 
@@ -1055,4 +1055,4 @@ Java程序通过栈上的 reference 数据来操作堆上的具体对象。两�
   - 缺点
     - 卡表复杂，导致额外占用堆空间20%以上
   
-  ![](images/6502933166020658910f51f08197bf25_MD5.jpg)
+  ![](static/images/2026/01/6502933166020658910f51f08197bf25_MD5.jpg)
