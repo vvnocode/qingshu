@@ -31,3 +31,8 @@ Thumbs.db
 # =====================
 node_modules/
 go.sum
+
+# =====================
+# 脚本配置（包含本地路径）
+# =====================
+scripts/migrate_config.yaml

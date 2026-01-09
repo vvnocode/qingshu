@@ -1,0 +1,33 @@
+# Obsidian 笔记迁移配置文件示例
+# 使用方法:
+#   1. 复制此文件为 migrate_config.yaml
+#   2. 修改配置为你的实际路径
+#   3. 运行: python3 scripts/migrate_obsidian.py --config scripts/migrate_config.yaml
+
+# 源 Obsidian 库路径
+source:
+  # Markdown 文件源目录
+  md_dir: ~/OldVault/notes
+  # 图片源目录
+  img_dir: ~/OldVault/attachments
+
+# 目标 Hugo 博客路径
+destination:
+  # Markdown 文件目标目录
+  md_dir: ~/qingshu/content/posts
+  # 图片目标目录
+  img_dir: ~/qingshu/static/images/2026/01
+
+# 路径替换规则
+path_replace:
+  # 旧的图片路径前缀（在 Markdown 中引用的路径）
+  old_prefix: attachments
+  # 新的图片路径前缀
+  new_prefix: images/2026/01
+
+# 操作选项
+options:
+  # true = 复制文件, false = 移动文件
+  copy_mode: false
+  # 是否递归处理子目录
+  recursive: true

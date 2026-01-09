@@ -1,5 +1,5 @@
 +++
-date = '2026-01-09T17:44:00+08:00'
+date = '2025-01-09T17:44:00+08:00'
 draft = false
 title = 'Java9之后内码为什么由UTF-16改为UTF-8'
 tags = ['Java', '编码', 'UTF-8', 'UTF-16', 'JDK9']

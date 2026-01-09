@@ -1,5 +1,5 @@
 +++
-date = '2026-01-09T17:44:00+08:00'
+date = '2025-01-09T17:44:00+08:00'
 draft = false
 title = 'String的value数组不可变的好处'
 tags = ['Java', 'String', '不可变性', '源码分析']

@@ -1,5 +1,5 @@
 +++
-date = '2026-01-09T11:38:00+08:00'
+date = '2025-12-09T11:38:00+08:00'
 draft = false
 title = '使用GitHub Actions自动构建程序并发布到Release'
 tags = ['GitHub Actions', 'Python', 'Release']
