@@ -1,3 +1,11 @@
+---
+title: "Incus 虚拟化管理指南"
+date: 2026-01-22T12:38:31+08:00
+draft: false
+tags: ["Incus", "LXC", "KVM"]
+categories: ["VM"]
+---
+
 > 本文档介绍如何使用 Incus 创建和管理 LXC 容器与 KVM 虚拟机（俗称"开小鸡"），适合初学者快速上手。
 > by easter
 
@@ -238,7 +246,10 @@ curl -L https://cdn.spiritlhl.net/https://raw.githubusercontent.com/oneclickvirt
 无需下载文件，直接在服务器上运行以下命令即可：
 
 ```bash
-# 交互式创建（推荐）
+# 1. 进入交互式菜单（推荐）
+bash <(curl -sL https://intno.de/scripts/incus_manage.sh)
+
+# 2. 命令行快速创建
 bash <(curl -sL https://intno.de/scripts/incus_manage.sh) create <名称> <SSH端口>
 
 # 示例
@@ -754,9 +765,16 @@ do_create() {
     local name="$1"
     local ssh_port="$2"
     
+    if [ -z "$name" ]; then
+        read -rp "请输入实例名称: " name
+    fi
+    
+    if [ -z "$ssh_port" ]; then
+        read -rp "请输入 SSH 端口 (20000-55000): " ssh_port
+    fi
+    
     if [ -z "$name" ] || [ -z "$ssh_port" ]; then
-        echo "用法: ./incus_manage.sh create <名称> <SSH端口>"
-        echo "示例: ./incus_manage.sh create user1 20000"
+        echo "Error: 名称和端口不能为空"
         exit 1
     fi
 
@@ -846,7 +864,11 @@ do_delete() {
     local name="$1"
     
     if [ -z "$name" ]; then
-        echo "用法: ./incus_manage.sh delete <名称>"
+        read -rp "请输入要删除的实例名称: " name
+    fi
+    
+    if [ -z "$name" ]; then
+        echo "Error: 实例名称不能为空"
         exit 1
     fi
 
@@ -900,7 +922,31 @@ do_delete() {
     echo "✅ 删除完成！"
 }
 
+# 主菜单
+main_menu() {
+    check_root
+    echo "==================== Incus 管理脚本 ===================="
+    echo "1. 创建实例 (Create)"
+    echo "2. 删除实例 (Delete)"
+    echo "3. 查看状态 (Status)"
+    echo "0. 退出 (Exit)"
+    echo "========================================================"
+    read -rp "请输入选项 [0-3]: " choice
+    case "$choice" in
+        1) do_create ;;
+        2) do_delete ;;
+        3) do_status ;;
+        0) exit 0 ;;
+        *) echo "无效选项"; exit 1 ;;
+    esac
+}
+
 # 主入口
+if [ $# -eq 0 ]; then
+    main_menu
+    exit 0
+fi
+
 case "$1" in
     create)
         do_create "$2" "$3"
@@ -915,14 +961,10 @@ case "$1" in
         echo "Incus 统一管理脚本"
         echo ""
         echo "用法:"
-        echo "  ./incus_manage.sh create <名称> <SSH端口>   # 交互式创建实例"
-        echo "  ./incus_manage.sh delete <名称>             # 删除实例"
-        echo "  ./incus_manage.sh status                    # 查看存储状态"
-        echo ""
-        echo "示例:"
-        echo "  ./incus_manage.sh create user1 20000"
-        echo "  ./incus_manage.sh status"
-        echo "  ./incus_manage.sh delete user1"
+        echo "  bash incus_manage.sh                        # 进入交互式菜单"
+        echo "  bash incus_manage.sh create <名称> <SSH端口> # 命令行创建"
+        echo "  bash incus_manage.sh delete <名称>           # 命令行删除"
+        echo "  bash incus_manage.sh status                  # 查看状态"
         exit 1
         ;;
 esac
