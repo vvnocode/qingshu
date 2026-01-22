@@ -1,0 +1,20 @@
+/* Side TOC for wide screens only */
+@media screen and (min-width: 1500px) {
+    .toc {
+        position: fixed !important;
+        top: 100px;
+        left: 40px;
+        width: 300px;
+        max-height: 80vh;
+        overflow-y: auto;
+        z-index: 99;
+
+        /* Add a subtle shadow to separate it from the background since it's floating */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Adjust the inner content slightly */
+    .toc .inner {
+        margin: 5px 10px;
+    }
+}
