@@ -1,6 +1,6 @@
-baseURL = 'https://qingshu.org/'
+baseURL = 'https://intno.de/'
 languageCode = 'zh-cn'
-title = 'qingshu'
+title = '随便写写'
 theme = 'PaperMod'
 
 # 分页设置
@@ -25,11 +25,9 @@ theme = 'PaperMod'
 
   # homeInfoParams 模式：首页显示欢迎信息 + 文章列表
   [params.homeInfoParams]
-    Title = "qingshu"
+    Title = "随便写写"
     Content = """
-🌱 青书一卷，记录成长。
-
-书写技术之路的思考与感悟。
+随便写写，记录成长。
 """
 
   # 封面图设置
