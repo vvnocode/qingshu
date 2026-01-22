@@ -1203,6 +1203,13 @@ incus storage show default
 
 # 查看存储池使用情况
 incus storage info default
+
+# 扩容存储池（仅适用于 loop 类型的存储池，如 btrfs/zfs 文件）
+incus storage set default size=5GB
+
+# 注意：如果使用的是 incus_manage.sh 创建的独立存储池
+# 请将 default 替换为对应的存储池名称，例如：
+# incus storage set storage_xxx size=10GB
 ```
 
 ### 镜像管理
