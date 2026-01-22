@@ -725,7 +725,13 @@ do_delete() {
     check_root
     local name="$1"
     
+    check_root
+    local name="$1"
+    
     if [ -z "$name" ]; then
+        echo "当前实例列表:"
+        incus list -c nts4
+        echo ""
         read -rp "请输入要删除的实例名称: " name
     fi
     
@@ -804,20 +810,208 @@ do_delete() {
     echo "✅ 删除完成！"
 }
 
+# 修改实例配置
+do_modify() {
+    check_root
+    local name="$1"
+    
+    if [ -z "$name" ]; then
+        read -rp "请输入要修改的实例名称: " name
+    fi
+    
+    if [ -z "$name" ]; then
+        echo "Error: 实例名称不能为空"
+        exit 1
+    fi
+
+    if ! incus info "$name" >/dev/null 2>&1; then
+        echo "Error: 实例 $name 不存在"
+        exit 1
+    fi
+
+    # 获取实例类型
+    local inst_type_raw
+    inst_type_raw=$(incus info "$name" 2>/dev/null | grep "^Type:" | awk '{print $2}')
+    local inst_type
+    case "$inst_type_raw" in
+        container) inst_type="LXC" ;;
+        virtual-machine) inst_type="KVM" ;;
+    esac
+
+    # 获取网卡名称
+    local nic_name
+    nic_name=$(incus config device list "${name}" 2>/dev/null | grep -E "^eth|^nic" | head -1)
+    [ -z "$nic_name" ] && nic_name="eth0"
+
+    while true; do
+        # 获取当前状态
+        local cur_cpu cur_mem cur_disk cur_bw cur_cn
+        cur_cpu=$(incus config get "$name" limits.cpu 2>/dev/null || echo "未设置")
+        cur_mem=$(incus config get "$name" limits.memory 2>/dev/null || echo "未设置")
+        
+        # Disk需要从device获取
+        # 尝试 root 设备
+        cur_disk=$(incus config device get "$name" root size 2>/dev/null)
+        if [ -z "$cur_disk" ]; then
+             # 如果没有直接在 device 设置，可能继承自 profile，或者使用 pool 默认
+             # 这里简单处理，如果获取不到，显示为默认/未知
+             cur_disk="默认/继承"
+        fi
+
+        cur_bw=$(incus config device get "$name" "$nic_name" limits.egress 2>/dev/null || echo "无限制")
+        cur_cn=$(incus config get "$name" user.block_cn 2>/dev/null || echo "false")
+        
+        echo ""
+        echo "==================== 修改配置: $name ($inst_type) ===================="
+        echo "  1) 修改 CPU 核数      (当前: $cur_cpu)"
+        echo "  2) 修改 内存大小      (当前: $cur_mem)"
+        echo "  3) 修改 硬盘大小      (当前: $cur_disk) [注意：仅支持扩容]"
+        echo "  4) 修改 带宽限制      (当前: $cur_bw)"
+        echo "  5) 切换 CN IP 屏蔽    (当前: $cur_cn)"
+        echo "  0) 返回主菜单"
+        echo "=================================================================="
+        read -rp "请选择 [0-5]: " choice
+        
+        case "$choice" in
+            1)
+                read -rp "请输入新的 CPU 核数 (如 2): " val
+                if [ -n "$val" ]; then
+                    incus config set "$name" limits.cpu "$val"
+                    echo "✅ CPU 已更新为 $val"
+                fi
+                ;;
+            2)
+                read -rp "请输入新的 内存大小 (如 1GB): " val
+                if [ -n "$val" ]; then
+                    incus config set "$name" limits.memory "$val"
+                    echo "✅ 内存 已更新为 $val"
+                    if [ "$inst_type" = "KVM" ]; then
+                         echo "ℹ️  KVM 虚拟机可能需要重启才能生效: incus restart $name"
+                    fi
+                fi
+                ;;
+            3)
+                echo "⚠️  注意: 硬盘大小通常只能扩容，不能缩容！缩容可能导致数据丢失或失败。"
+                read -rp "请输入新的 硬盘大小 (如 20GB): " val
+                if [ -n "$val" ]; then
+                     # 检查 root 设备是否存在，如果不存在则添加
+                     if ! incus config device show "$name" | grep -q "root:"; then
+                         # 从 profile 拷贝一份 root 设备配置过来，或者新建
+                         # 简单起见，从 storage_NAME 池 (LXC) 或 default 池 (KVM) 覆盖
+                         # 更稳妥的是先 override
+                         local pool
+                         pool=$(incus config device show "$name" | grep -A5 "root:" | grep "pool:" | awk '{print $2}')
+                         [ -z "$pool" ] && pool="default" # 假设
+                         incus config device override "$name" root size="$val" 2>/dev/null || incus config device add "$name" root disk pool="$pool" path="/" size="$val"
+                     else
+                         incus config device set "$name" root size="$val"
+                     fi
+                     echo "✅ 硬盘大小已请求更新为 $val (请进入系统确认生效情况)"
+                fi
+                ;;
+            4)
+                echo "请输入带宽限制 (如 100Mbit)，留空清除限制"
+                read -rp "带宽限制: " val
+                if [ -n "$val" ]; then
+                    incus config device override "$name" "$nic_name" limits.egress="$val" limits.ingress="$val"
+                    echo "✅ 带宽限制已更新为 $val"
+                else
+                    incus config device unset "$name" "$nic_name" limits.egress
+                    incus config device unset "$name" "$nic_name" limits.ingress
+                    echo "✅ 带宽限制已清除"
+                fi
+                ;;
+            5)
+                # 切换 CN 屏蔽
+                local ssh_p port_range
+                ssh_p=$(incus config get "$name" user.ssh_port 2>/dev/null)
+                port_range=$(incus config get "$name" user.port_range 2>/dev/null)
+                
+                if [ -z "$ssh_p" ] || [ -z "$port_range" ]; then
+                    echo "Error: 无法获取实例的 SSH 端口或端口范围配置 (user.ssh_port / user.port_range)"
+                    echo "       仅支持通过本脚本创建且保存了元数据的实例。"
+                else
+                    check_ipset
+                    local p_start p_end
+                    p_start=$(echo "$port_range" | cut -d'-' -f1)
+                    p_end=$(echo "$port_range" | cut -d'-' -f2)
+                    
+                    if [ "$cur_cn" = "true" ]; then
+                        echo ">> 正在关闭 CN 屏蔽..."
+                        unblock_cn_ports "$ssh_p" "$p_start" "$p_end"
+                        incus config set "$name" user.block_cn "false"
+                        echo "✅ 已关闭"
+                    else
+                        echo ">> 正在开启 CN 屏蔽..."
+                        block_cn_ports "$ssh_p" "$p_start" "$p_end"
+                        incus config set "$name" user.block_cn "true"
+                        echo "✅ 已开启"
+                    fi
+                fi
+                ;;
+            0)
+                return
+                ;;
+            *)
+                echo "无效选项"
+                ;;
+        esac
+        echo ""
+        read -rp "按回车键继续..." dummy
+    done
+}
+
+# 查看实例详情
+do_info() {
+    check_root
+    local name="$1"
+    
+    if [ -z "$name" ]; then
+        echo "当前实例列表:"
+        incus list -c nts4
+        echo ""
+        read -rp "请输入要查看详情的实例名称: " name
+    fi
+    
+    if [ -z "$name" ]; then
+        echo "Error: 实例名称不能为空"
+        exit 1
+    fi
+
+    if ! incus info "$name" >/dev/null 2>&1; then
+        echo "Error: 实例 $name 不存在"
+        exit 1
+    fi
+
+    echo "==================== 实例详情: $name ===================="
+    echo "[基本信息]"
+    incus info "$name"
+    echo ""
+    echo "[配置详情]"
+    incus config show "$name" --expanded
+    echo "========================================================="
+    echo ""
+    read -rp "按回车键返回..." dummy
+}
+
 # 主菜单
 main_menu() {
     check_root
     echo "==================== Incus 管理脚本 ===================="
     echo "1. 创建实例 (Create)"
     echo "2. 删除实例 (Delete)"
-    echo "3. 查看状态 (Status)"
+    echo "3. 修改配置 (Modify)"
+    echo "4. 实例详情 (Info)"
+    echo "5. 查看状态 (Status)"
     echo "0. 退出 (Exit)"
     echo "========================================================"
-    read -rp "请输入选项 [0-3]: " choice
+    read -rp "请输入选项 [0-5]: " choice
     case "$choice" in
         1) do_create ;;
         2) do_delete ;;
-        3) do_status ;;
+        3) do_modify ;;
+        4) do_info ;;
+        5) do_status ;;
         0) exit 0 ;;
         *) echo "无效选项"; exit 1 ;;
     esac
@@ -836,6 +1030,12 @@ case "$1" in
     delete)
         do_delete "$2"
         ;;
+    modify)
+        do_modify "$2"
+        ;;
+    info)
+        do_info "$2"
+        ;;
     status)
         do_status
         ;;
@@ -846,6 +1046,8 @@ case "$1" in
         echo "  bash incus_manage.sh                        # 进入交互式菜单"
         echo "  bash incus_manage.sh create <名称> <SSH端口> # 命令行创建"
         echo "  bash incus_manage.sh delete <名称>           # 命令行删除"
+        echo "  bash incus_manage.sh modify <名称>           # 修改已存在实例"
+        echo "  bash incus_manage.sh info <名称>             # 查看实例详情"
         echo "  bash incus_manage.sh status                  # 查看状态"
         exit 1
         ;;
