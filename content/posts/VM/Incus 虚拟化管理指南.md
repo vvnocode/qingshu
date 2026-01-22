@@ -509,6 +509,46 @@ incus storage set default size=5GB
 # incus storage set storage_xxx size=10GB
 ```
 
+#### 如何缩小存储池（需删除重建）
+
+Incus 的 loop 类型存储池（如 btrfs/zfs 文件）**不支持直接缩小**。如果需要获得更小的存储池，只能**删除并重建**。
+
+**情况一：如果是 `incus_manage.sh` 创建的独立存储池**
+
+这些存储池是跟随实例创建的（名为 `storage_实例名`）。
+
+1.  **删除实例**：使用脚本删除实例，它会自动连带删除对应的独立存储池。
+    ```bash
+    ./incus_manage.sh delete <实例名>
+    ```
+2.  **重建实例**：重新运行创建命令，并指定更小的硬盘大小。
+
+**情况二：如果是全局 `default` 存储池**
+
+这是一个更复杂的过程，因为它通常被 `default` Profile 引用，且可能存放了多个容器或镜像。
+
+1.  **备份数据**：将重要数据备份到外部。
+2.  **删除依赖资源**：必须删除所有使用该存储池的容器、虚拟机和自定义 Profile。
+3.  **解除默认 Profile 关联**：
+    ```bash
+    # 临时移除 default profile 对存储池的引用
+    incus profile device remove default root
+    ```
+4.  **删除存储池**：
+    ```bash
+    incus storage delete default
+    ```
+5.  **重建存储池**（指定新的大小）：
+    ```bash
+    # 创建 5GB 的 btrfs 存储池
+    incus storage create default btrfs size=5GB
+    ```
+6.  **恢复 Profile 关联**：
+    ```bash
+    # 将其重新加回 default profile
+    incus profile device add default root disk pool=default path=/
+    ```
+
 ### 镜像管理
 
 ```bash
