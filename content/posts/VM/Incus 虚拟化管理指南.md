@@ -166,7 +166,7 @@ curl -L https://cdn.spiritlhl.net/https://raw.githubusercontent.com/oneclickvirt
 > incus profile device add default eth0 nic network=incusbr0
 > ```
 
-安装完成后，即可直接使用 `incus_manage.sh` 创建实例。
+安装完成后，即可直接使用下面方式创建实例。
 
 > [!NOTE]- 手动安装（高级用户）
 > 
