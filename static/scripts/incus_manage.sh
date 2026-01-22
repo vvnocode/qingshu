@@ -14,6 +14,8 @@ LXC_DISK="5GB"
 LXC_PORT_COUNT=9999
 LXC_BANDWIDTH=""
 LXC_IMAGE="images:debian/13"
+LXC_BLOCK_CN="false"
+
 
 # ================= KVM 默认配置 =================
 KVM_CPU=1
@@ -23,6 +25,12 @@ KVM_PORT_COUNT=9999
 KVM_BANDWIDTH=""
 KVM_IMAGE="images:debian/13"
 KVM_SECUREBOOT="false"
+KVM_BLOCK_CN="false"
+
+
+# ================= 扩展功能配置 =================
+CN_IP_SET_URL="https://raw.githubusercontent.com/herrbischoff/country-ip-blocks/master/ipv4/cn.cidr"
+
 
 # ============================================================
 
@@ -31,6 +39,86 @@ check_root() {
         echo "Error: 必须使用 root 权限运行"
         exit 1
     fi
+}
+
+# 检查并配置 ipset
+check_ipset() {
+    if ! command -v ipset >/dev/null 2>&1; then
+        echo ">> 安装 ipset..."
+        apt-get update -y >/dev/null 2>&1
+        apt-get install -y ipset >/dev/null 2>&1
+    fi
+
+    # 检查 cn_ip 集合是否存在
+    if ! ipset list cn_ip >/dev/null 2>&1; then
+        echo ">> 创建 China IP 集合 (cn_ip)..."
+        ipset create cn_ip hash:net
+        echo ">> 下载并导入 CN IP 到 ipset..."
+        # 临时文件
+        local tmp_file="/tmp/cn_ip.cidr"
+        if curl -sL "$CN_IP_SET_URL" -o "$tmp_file"; then
+            echo "   正在导入规则 (可能需要几秒钟)..."
+            # 批量导入以提高速度
+            sed 's/^/add cn_ip /' "$tmp_file" | ipset restore -!
+            rm -f "$tmp_file"
+            echo "   ✅ CN IP 集合创建完成"
+        else
+            echo "   ❌ 下载 CN IP 列表失败，跳过屏蔽功能"
+            return 1
+        fi
+    fi
+    return 0
+}
+
+# 屏蔽 CN IP 访问特定端口
+block_cn_ports() {
+    local ssh_port="$1"
+    local port_start="$2"
+    local port_end="$3"
+
+    # 检查 ipset 是否可用
+    if ! ipset list cn_ip >/dev/null 2>&1; then
+        echo "⚠️  cn_ip 集合不存在，跳过屏蔽"
+        return
+    fi
+    
+    echo ">> 配置防火墙规则 (禁止中国大陆 IP 访问)..."
+    
+    # 使用 raw 表 PREROUTING 链，在 NAT 和路由决策之前拦截
+    # 这样既能拦截 LXC (INPUT)，也能拦截 KVM NAT (FORWARD)
+    # SSH 端口
+    iptables -t raw -I PREROUTING -p tcp --dport "$ssh_port" -m set --match-set cn_ip src -j DROP
+    
+    # 端口范围 (TCP + UDP)
+    # 端口范围 (TCP + UDP)
+    iptables -t raw -I PREROUTING -p tcp --dport "${port_start}:${port_end}" -m set --match-set cn_ip src -j DROP
+    iptables -t raw -I PREROUTING -p udp --dport "${port_start}:${port_end}" -m set --match-set cn_ip src -j DROP
+    
+    echo "   ✅ 已添加防火墙规则 (SSH: $ssh_port, Ports: $port_start-$port_end)"
+    echo "   ⚠️  注意: 规则仅当前生效，重启宿主机后需要重新添加 (除非安装 iptables-persistent)"
+}
+
+# 解除屏蔽
+unblock_cn_ports() {
+    local ssh_port="$1"
+    local port_start="$2"
+    local port_end="$3"
+    
+    echo ">> 移除防火墙屏蔽规则..."
+    
+    # 尝试删除规则，即使不存在也不报错
+    # 尝试删除规则，即使不存在也不报错
+    # 先清理 INPUT (旧版本兼容)
+    iptables -D INPUT -p tcp --dport "$ssh_port" -m set --match-set cn_ip src -j DROP 2>/dev/null || true
+    iptables -D INPUT -p tcp --dport "${port_start}:${port_end}" -m set --match-set cn_ip src -j DROP 2>/dev/null || true
+    iptables -D INPUT -p udp --dport "${port_start}:${port_end}" -m set --match-set cn_ip src -j DROP 2>/dev/null || true
+
+    # 清理 raw PREROUTING
+    iptables -t raw -D PREROUTING -p tcp --dport "$ssh_port" -m set --match-set cn_ip src -j DROP 2>/dev/null || true
+    iptables -t raw -D PREROUTING -p tcp --dport "${port_start}:${port_end}" -m set --match-set cn_ip src -j DROP 2>/dev/null || true
+    iptables -t raw -D PREROUTING -p udp --dport "${port_start}:${port_end}" -m set --match-set cn_ip src -j DROP 2>/dev/null || true
+    
+    echo "   ✅ 已移除相关防火墙规则"
 }
 
 # 检查并修复系统临时端口范围
@@ -188,6 +276,7 @@ show_lxc_config() {
     echo "  5) 额外端口数量:    $LXC_PORT_COUNT"
     echo "  6) 带宽限制:        ${LXC_BANDWIDTH:-无限制}"
     echo "  7) 系统镜像:        $LXC_IMAGE"
+    echo "  8) 屏蔽CN IP:       $LXC_BLOCK_CN"
 }
 
 show_kvm_config() {
@@ -200,6 +289,7 @@ show_kvm_config() {
     echo "  5) 带宽限制:        ${KVM_BANDWIDTH:-无限制}"
     echo "  6) 系统镜像:        $KVM_IMAGE"
     echo "  7) Secure Boot:     $KVM_SECUREBOOT"
+    echo "  8) 屏蔽CN IP:       $KVM_BLOCK_CN"
 }
 
 # 修改 LXC 配置
@@ -240,6 +330,10 @@ modify_lxc_config() {
             read -rp "系统镜像 [$LXC_IMAGE]: " val
             [ -n "$val" ] && LXC_IMAGE="$val"
             ;;
+        8)
+            read -rp "屏蔽 CN IP (true/false) [$LXC_BLOCK_CN]: " val
+            [ -n "$val" ] && LXC_BLOCK_CN="$val"
+            ;;
     esac
 }
 
@@ -276,6 +370,10 @@ modify_kvm_config() {
             read -rp "Secure Boot (true/false) [$KVM_SECUREBOOT]: " val
             [ -n "$val" ] && KVM_SECUREBOOT="$val"
             ;;
+        8)
+            read -rp "屏蔽 CN IP (true/false) [$KVM_BLOCK_CN]: " val
+            [ -n "$val" ] && KVM_BLOCK_CN="$val"
+            ;;
     esac
 }
 
@@ -283,6 +381,7 @@ modify_kvm_config() {
 create_lxc() {
     local name="$1"
     local ssh_port="$2"
+    local block_cn="$LXC_BLOCK_CN"
     
     local port_start=$((ssh_port + 1))
     local port_end=$((ssh_port + LXC_PORT_COUNT))
@@ -345,6 +444,19 @@ create_lxc() {
     incus exec "${name}" -- sed -i 's/PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
     incus exec "${name}" -- systemctl restart ssh || incus exec "${name}" -- systemctl restart sshd
 
+    # 保存配置到实例 config，方便删除时读取
+    incus config set "${name}" user.ssh_port "${ssh_port}"
+    incus config set "${name}" user.port_range "${port_start}-${port_end}"
+
+    if [ "$block_cn" = "true" ]; then
+        if check_ipset; then
+            block_cn_ports "$ssh_port" "$port_start" "$port_end"
+            incus config set "${name}" user.block_cn "true"
+        else
+            echo "⚠️  无法启用 CN 屏蔽功能"
+        fi
+    fi
+
     cat > "${name}.info" << EOF
 类型: LXC 容器
 名称: ${name}
@@ -352,6 +464,7 @@ SSH端口: ${ssh_port}
 密码: ${password}
 端口范围: ${port_start}-${port_end}
 存储池: storage_${name}
+CN屏蔽: ${block_cn:-false}
 EOF
 
     echo "=========================================="
@@ -367,6 +480,7 @@ EOF
 create_kvm() {
     local name="$1"
     local ssh_port="$2"
+    local block_cn="$KVM_BLOCK_CN"
     
     local password
     password="$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)"
@@ -467,6 +581,22 @@ EOF
         incus exec "${name}" -- systemctl restart ssh || incus exec "${name}" -- systemctl restart sshd
     fi
 
+    # 保存配置到实例 config
+    # KVM 端口范围计算逻辑相同：start = ssh + 1, end = ssh + count
+    local port_start=$((ssh_port + 1))
+    local port_end=$((ssh_port + KVM_PORT_COUNT))
+    incus config set "${name}" user.ssh_port "${ssh_port}"
+    incus config set "${name}" user.port_range "${port_start}-${port_end}"
+
+    if [ "$block_cn" = "true" ]; then
+        if check_ipset; then
+            block_cn_ports "$ssh_port" "$port_start" "$port_end"
+            incus config set "${name}" user.block_cn "true"
+        else
+             echo "⚠️  无法启用 CN 屏蔽功能"
+        fi
+    fi
+
     cat > "${name}.info" << EOF
 类型: KVM 虚拟机
 名称: ${name}
@@ -475,6 +605,7 @@ SSH端口: ${ssh_port}
 密码: ${password}
 VNC控制台: incus console ${name} --type=vga
 注意: KVM 端口范围转发较复杂，建议直接使用虚拟机 IP
+CN屏蔽: ${block_cn:-false}
 EOF
 
     echo "=========================================="
@@ -641,6 +772,26 @@ do_delete() {
     echo ""
     echo ">> 停止并删除实例 $name ..."
     incus stop "$name" --force 2>/dev/null || true
+    
+    # 检查是否启用了 CN 屏蔽
+    local is_blocked
+    is_blocked=$(incus config get "$name" user.block_cn 2>/dev/null || echo "false")
+    
+    if [ "$is_blocked" = "true" ]; then
+        local ssh_p
+        ssh_p=$(incus config get "$name" user.ssh_port 2>/dev/null)
+        local range_p
+        range_p=$(incus config get "$name" user.port_range 2>/dev/null)
+        
+        if [ -n "$ssh_p" ] && [ -n "$range_p" ]; then
+            # 解析范围
+            local p_start p_end
+            p_start=$(echo "$range_p" | cut -d'-' -f1)
+            p_end=$(echo "$range_p" | cut -d'-' -f2)
+            unblock_cn_ports "$ssh_p" "$p_start" "$p_end"
+        fi
+    fi
+    
     incus delete "$name"
 
     # 删除独立存储池（如果存在）
