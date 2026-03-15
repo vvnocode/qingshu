@@ -1,0 +1,14 @@
+{{- $dest := .Destination -}}
+{{- $isInternal := false -}}
+
+{{- if and (strings.HasSuffix $dest ".md") (not (hasPrefix $dest "http")) -}}
+  {{- $isInternal = true -}}
+  {{- with .Page.GetPage $dest -}}
+    {{- $dest = .RelPermalink -}}
+  {{- end -}}
+{{- end -}}
+
+<a href="{{ $dest | safeURL }}"
+  {{- with .Title }} title="{{ . }}"{{ end -}}
+  {{- if and (not $isInternal) (hasPrefix $dest "http") }} target="_blank" rel="noopener noreferrer"{{ end -}}
+>{{ .Text | safeHTML }}</a>
