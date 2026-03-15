@@ -3,7 +3,8 @@
 
 {{- if and (strings.HasSuffix $dest ".md") (not (hasPrefix $dest "http")) -}}
   {{- $isInternal = true -}}
-  {{- with .Page.GetPage $dest -}}
+  {{- $parsed := urls.Parse $dest -}}
+  {{- with .Page.GetPage $parsed.Path -}}
     {{- $dest = .RelPermalink -}}
   {{- end -}}
 {{- end -}}
