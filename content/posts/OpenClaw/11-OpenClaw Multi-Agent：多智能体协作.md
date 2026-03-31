@@ -1,21 +1,13 @@
 +++
-date = '2026-03-15T00:11:00+08:00'
+date = '2026-03-15T11:50:00+08:00'
 draft = false
 title = 'OpenClaw Multi-Agent：多智能体协作'
-tags = ['OpenClaw', 'Multi-Agent', 'AI']
+tags = ['OpenClaw', 'AI', 'Agent', 'Multi-Agent']
 +++
 
-## 本章导读
+# OpenClaw Multi-Agent：多智能体协作
 
-> **这篇文档回答三个问题：**
->
-> 1. 为什么需要多个 Agent？
-> 2. 多 Agent 怎么配置？
-> 3. 它们之间怎么协作？
-
-一个 Agent 就像一个"全能助手"——什么都能干，但什么都管容易出问题：权限太大、上下文混乱、响应变慢。
-
-**多 Agent 的核心思想**：让不同的 Agent **各司其职**，就像一个公司有不同部门、不同岗位，各自负责各自的事，通过协作完成复杂工作。
+单个 Agent 什么都管容易出问题：权限过大、上下文混乱、响应变慢。多 Agent 架构让不同 Agent 各司其职，通过协作完成复杂工作。本篇介绍多 Agent 的配置、隔离和协作模式。
 
 ---
 
@@ -47,11 +39,11 @@ tags = ['OpenClaw', 'Multi-Agent', 'AI']
 
 多 Agent 系统由三个核心配置文件组成：
 
-| 配置 | 作用 | 类比 |
-|------|------|------|
-| **agents.list** | 定义所有 Agent 的角色、模型、权限 | 公司的"岗位编制表" |
-| **bindings** | 定义消息路由规则（什么消息给哪个 Agent） | 公司的"分工制度" |
-| **workspace** | 定义每个 Agent 的工作目录 | 每个部门的"办公室" |
+| 配置 | 作用 |
+|------|------|
+| **agents.list** | 定义所有 Agent 的角色、模型、权限 |
+| **bindings** | 定义消息路由规则（什么消息给哪个 Agent） |
+| **workspace** | 定义每个 Agent 的工作目录 |
 
 ---
 
@@ -72,7 +64,7 @@ tags = ['OpenClaw', 'Multi-Agent', 'AI']
       {
         "id": "main",
         "name": "Main Agent",
-        "model": "anthropic/claude-sonnet-4-5",
+        "model": "bailian/kimi-k2.5",
         "description": "主调度 Agent，处理通用请求，协调其他 Agent",
         "tools": {
           "allow": [
@@ -87,7 +79,7 @@ tags = ['OpenClaw', 'Multi-Agent', 'AI']
       {
         "id": "dingtalk-agent",
         "name": "DingTalk Agent",
-        "model": "siliconflow/deepseek-v3",
+        "model": "bailian/glm-5",
         "description": "钉钉通道专员，处理来自钉钉群的消息",
         "tools": {
           "allow": [
@@ -100,7 +92,8 @@ tags = ['OpenClaw', 'Multi-Agent', 'AI']
       {
         "id": "denied",
         "name": "Denied Agent",
-        "model": "siliconflow/deepseek-v3",
+        "workspace": "~/.openclaw/workspace-denied",
+        "model": "bailian/MiniMax-M2.5",
         "description": "兜底 Agent，拒绝所有未匹配的请求",
         "tools": { "deny": ["*"] }
       }
@@ -151,6 +144,8 @@ mkdir -p ~/.openclaw/workspace-dingtalk-agent
 
 ## 4. 五层隔离架构
 
+> 本节聚焦多 Agent 场景下的隔离架构。[10-规范与安全准则](./10-OpenClaw%20规范与安全准则.md) 第 2 节的"五层防御"是全局视角的安全架构；本节的"五层隔离"是其中 Agent 层和运行时层在多 Agent 场景下的具体展开。
+
 ### 为什么需要多层隔离？
 
 仅做 Workspace 隔离时，仍存在三类残留风险：
@@ -173,7 +168,7 @@ mkdir -p ~/.openclaw/workspace-dingtalk-agent
 | **Exec Sandbox 层** | 运行时边界 | 命令执行在沙箱中隔离 | 容器化 / 沙箱运行 |
 | **Browser Sandbox 层** | 会话态边界 | 浏览器操作在独立沙箱中 | 隔离的浏览器实例 |
 
-> 💡 **简单理解**：每个 Agent 就像一个独立的"隔间办公"——有自己的桌子（Workspace）、自己的权限卡（Tool Policy）、自己的电脑（Sandbox），互不干扰。
+> 每个 Agent 拥有独立的 Workspace、Tool Policy 和 Sandbox 配置，互不干扰。
 
 > ⚠️ **最常见误解：`tools.deny: ["exec"]` ≠ 完整安全方案**
 >
@@ -193,7 +188,6 @@ Agent 之间通过两种方式通信：
 |------|-----------------|-----------------|
 | 作用 | 创建一个新的子 Session | 向已有 Session 发送消息 |
 | Session | 创建新 Session | 复用已有 Session |
-| 类比 | 开一个新会议 | 在现有群里发消息 |
 | 适用场景 | 新任务、独立工作流 | 追加信息、持续对话 |
 
 ### agentId 强约束
@@ -298,20 +292,20 @@ Coordinator ───────┼──→ Backend Dev（后端开发）
 - **Specialist Agents**：各自专注一个领域，并行执行
 - **适用场景**：Feature 开发团队、复杂项目交付
 
-### 进阶：开发团队 Agent 架构实战
+### 进阶案例：开发团队 Agent 架构实战
 
-这是一个经过实际验证的完整开发团队架构，包含六个角色，适用于中大型项目的自动化开发流程。
+> 以下是一个面向中大型项目的六角色架构参考设计。日常使用者可跳过本节。
 
 #### 六角色设计与权限矩阵
 
 | 角色 | 模型建议 | tools.allow | tools.deny |
 |------|---------|-------------|------------|
-| tech-lead | 高质量模型（如 anthropic/claude-opus-4-6） | read, message, sessions_spawn, sessions_send, memory_search | gateway |
-| planner | 高质量模型 | read, write, edit, web_search, memory_search | gateway, exec |
-| implementer | 编码模型（如 dashscope/qwen-coder-plus） | read, write, edit, exec, process, memory_search | gateway |
-| verifier | 低成本模型 | read, write, edit, exec, process, memory_search | gateway |
-| tester | 低成本模型 | read, write, edit, exec, process, memory_search | gateway |
-| reviewer | 高质量模型 | read, write, edit, memory_search | gateway, exec |
+| tech-lead | kimi-k2.5（主力） | read, message, sessions_spawn, sessions_send, memory_search | gateway |
+| planner | kimi-k2.5（主力） | read, write, edit, web_search, memory_search | gateway, exec |
+| implementer | glm-5（执行型） | read, write, edit, exec, process, memory_search | gateway |
+| verifier | glm-5（执行型） | read, write, edit, exec, process, memory_search | gateway |
+| tester | glm-5（执行型） | read, write, edit, exec, process, memory_search | gateway |
+| reviewer | kimi-k2.5（主力） | read, write, edit, memory_search | gateway, exec |
 
 > 💡 **设计思路**：Tech Lead 只有调度权，不直接写代码；Planner 可搜索但禁止执行；Implementer 拥有完整的代码写入与执行权限；Reviewer 只读代码不执行，确保审查独立性。
 

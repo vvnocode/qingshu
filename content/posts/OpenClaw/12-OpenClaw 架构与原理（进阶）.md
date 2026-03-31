@@ -1,21 +1,13 @@
 +++
-date = '2026-03-15T00:12:00+08:00'
+date = '2026-03-15T12:00:00+08:00'
 draft = false
 title = 'OpenClaw 架构与原理（进阶）'
-tags = ['OpenClaw', '架构', '进阶']
+tags = ['OpenClaw', 'AI', 'Agent', '架构']
 +++
 
-## 本章导读
+# OpenClaw 架构与原理（进阶）
 
-> **这篇文档回答以下问题：**
->
-> 1. Gateway 内部事件流是怎样的？一条消息经历了哪些处理环节？
-> 2. Agent Loop 从收到消息到回复的完整流程是什么？
-> 3. Session 管理和 Compaction 机制如何保证对话可持续？
-> 4. Memory、安全、扩展机制的架构本质是什么？
-> 5. 遇到问题时如何通过日志和命令进行诊断？
->
-> 如果你只是日常使用 OpenClaw，可以跳过本章。如果你负责部署、定制开发或排查疑难问题，强烈建议通读。
+本篇面向负责部署、定制开发或排查疑难问题的同事，深入讲解 Gateway 事件流、Agent Loop、Session/Compaction、安全架构和扩展机制。日常使用者可跳过。
 
 ---
 
@@ -377,7 +369,7 @@ Session 数据以文件形式持久化在各 Agent 的状态目录下（`~/.open
 | **本质** | 单次 LLM 调用的输入 | 跨会话的持久化存储 |
 | **生命周期** | 一次 Session 内 | 永久（直到手动删除） |
 | **大小限制** | 受模型 Context Length 约束（如 200K Token） | 受文件系统空间约束 |
-| **类比** | 工作台上摊开的资料 | 档案柜里的文件夹 |
+| **访问方式** | 直接在 LLM 调用中传入 | 通过 `memory_search` 工具检索 |
 
 ### 5.2 Context 窗口组成
 
@@ -424,13 +416,13 @@ flowchart TD
 | **Step 3: 重建上下文** | 用 System Prompt + 摘要 + 最近 N 轮消息重新组装上下文 | 缩减 Context 大小 |
 | **Step 4: 重试** | 用新的（更短的）上下文重新发送当前消息给 LLM | 确保对话可以继续 |
 
-> 💡 **类比**：Compaction 就像整理书桌——桌面快堆满了，先把重要文件归档到柜子里（Memory 冲刷），把散乱的笔记整理成一页摘要（历史摘要），清空桌面重新摆放（重建上下文），然后继续工作（重试）。
+> Compaction 的本质是用一次额外的 LLM 调用来换取后续对话的可持续性——在信息丢失风险和 Token 节省之间做权衡。
 
 ---
 
 ## 6. Memory 系统架构
 
-> 完整的 Memory 概念、使用方法和最佳实践请参见 [05-Memory：让 AI 越用越聪明](./05-OpenClaw%20Memory：让%20AI%20越用越聪明.md)。本节聚焦架构视角。
+> 完整的 Memory 概念、使用方法和最佳实践请参见 [05-Memory：持久记忆系统](./05-OpenClaw%20Memory：让%20AI%20越用越聪明.md)。本节聚焦架构视角。
 
 Memory 系统采用**两层架构**：长期记忆（`MEMORY.md`，自动注入 System Prompt）和每日记忆（`memory/*.md`，通过向量搜索按需检索）。两层分工明确——长期记忆存储策展级关键信息，每日记忆存储日常详细记录。
 
@@ -649,7 +641,7 @@ openclaw gateway start --log-level debug
 ## 11. 延伸阅读
 
 - [03-核心概念与配置](./03-OpenClaw%20核心概念与配置.md) — 回顾基础概念和配置体系
-- [05-Memory：让 AI 越用越聪明](./05-OpenClaw%20Memory：让%20AI%20越用越聪明.md) — Memory 的使用与最佳实践
+- [05-Memory：持久记忆系统](./05-OpenClaw%20Memory：让%20AI%20越用越聪明.md) — Memory 的使用与最佳实践
 - [11-Multi-Agent](./11-OpenClaw%20Multi-Agent：多智能体协作.md) — 多 Agent 协作架构
 - [10-规范与安全准则](./10-OpenClaw%20规范与安全准则.md) — 操作规范和安全硬规则
 - [06-大模型配置与费用优化](./06-OpenClaw%20大模型配置与费用优化.md) — Token 节省和模型选择
@@ -662,4 +654,4 @@ openclaw gateway start --log-level debug
 
 | ← 上一篇 | 返回总览 | 下一篇 → |
 |:---|:---:|---:|
-| [11-Multi-Agent：多智能体协作](./11-OpenClaw%20Multi-Agent：多智能体协作.md) | [00-总览](./00-OpenClaw%20系列教程：总览.md) | |
+| [11-Multi-Agent：多智能体协作](./11-OpenClaw%20Multi-Agent：多智能体协作.md) | [00-总览](./00-OpenClaw%20系列教程：总览.md) | [14-故障排查手册](./14-OpenClaw%20故障排查手册.md) |

@@ -1,19 +1,13 @@
 +++
-date = '2026-03-15T00:07:00+08:00'
+date = '2026-03-15T11:10:00+08:00'
 draft = false
 title = 'OpenClaw 实战案例'
-tags = ['OpenClaw', '实战', 'AI']
+tags = ['OpenClaw', 'AI', 'Agent', '实战']
 +++
 
-## 本章导读
+# OpenClaw 实战案例
 
-> **这篇文档回答以下问题：**
->
-> 1. OpenClaw 在行政/HR、运营、财务等非开发场景中能怎么用？
-> 2. 一个完整的 Agent 场景需要哪些配置步骤？
-> 3. 多 Agent + Cron + Memory 怎么组合出团队协作方案？
-
-每个案例都包含**完整的配置步骤**，你可以直接参考落地。
+本篇提供面向行政、运营、财务等非开发场景的完整落地案例，每个案例都包含配置步骤，可直接参考。
 
 ---
 
@@ -23,37 +17,25 @@ tags = ['OpenClaw', '实战', 'AI']
 
 行政部门每天处理大量重复事务：
 
-- 📋 **考勤统计**：每天统计异常考勤，找人确认原因
-- 🏢 **会议室预约提醒**：提醒参会人，避免忘记或冲突
+- **考勤统计**：每天统计异常考勤，找人确认原因
+- **会议室预约提醒**：提醒参会人，避免忘记或冲突
 - 📢 **通知下发**：公司通知、节假日安排、行政提醒
-- 📊 **日报/周报收集**：催交、汇总、整理
+- **日报/周报收集**：催交、汇总、整理
 
 这些工作高频、重复、耗时，非常适合交给 AI Agent 处理。
 
 ### 1.2 方案架构
 
-```
-┌──────────────────────────────────────────┐
-│              OpenClaw 平台               │
-│                                          │
-│  ┌──────────┐    ┌───────────────────┐   │
-│  │ Main     │    │ 行政助手 Agent    │   │
-│  │ Agent    │───→│ (admin-assistant) │   │
-│  │ (协调)   │    │ (执行具体任务)    │   │
-│  └──────────┘    └───────┬───────────┘   │
-│                          │               │
-│  ┌───────┐    ┌─────────┐│┌──────────┐   │
-│  │ Cron  │    │ Memory  │││ Skill    │   │
-│  │ 定时  │    │ 记忆    │││ 技能包   │   │
-│  └───┬───┘    └─────────┘│└──────────┘   │
-│      │                   │               │
-└──────┼───────────────────┼───────────────┘
-       │                   │
-       ▼                   ▼
-  ┌─────────┐        ┌──────────┐
-  │ 每天8:00│        │ 钉钉群   │
-  │ 每天18:00│       │ 私聊/群聊 │
-  └─────────┘        └──────────┘
+```mermaid
+flowchart TD
+    subgraph OpenClaw["OpenClaw 平台"]
+        Main["Main Agent\n(协调)"] -->|spawn| Admin["行政助手 Agent\n(admin-assistant)"]
+        Cron["Cron 定时"] --> Main
+        Admin --- Memory["Memory 记忆"]
+        Admin --- Skill["Skill 技能包"]
+    end
+    Cron --> Schedule["每天 8:00 / 18:00"]
+    Admin --> DingTalk["钉钉群 私聊/群聊"]
 ```
 
 - **Main Agent**：协调中心，接收和分发任务
@@ -100,7 +82,7 @@ openclaw plugins install @soimy/dingtalk
 {
   "id": "admin-assistant",
   "name": "行政助手",
-  "model": "bailian/qwen3.5-plus",
+  "model": "bailian/kimi-k2.5",
   "workspace": "~/.openclaw/workspace-admin-assistant",
   "tools": {
     "allow": ["read", "write", "edit", "web_search", "memory_search", "message", "cron"],
@@ -224,11 +206,11 @@ clawhub install meeting-minutes
 
 | 指标 | 人工处理 | AI 助手 | 提升幅度 |
 |------|---------|---------|---------|
-| 考勤异常统计 | 30 分钟/天 | 自动完成，推送到群 | 节省 100% 人力 |
-| 会议室预约提醒 | 手动逐个通知 | 自动发送，到点提醒 | 覆盖率 100%（人工易遗漏） |
-| 通知下发 | 20 分钟起草 + 排版 | 1 分钟口述 → AI 排版 | 效率提升 10x |
-| 周报收集汇总 | 1-2 小时 | 自动催收 + 汇总 | 节省 90% 时间 |
-| 行政问答（请假流程等） | 每天被问 10+ 次 | AI 自动回复 | 释放行政同事精力 |
+| 考勤异常统计 | 30 分钟/天 | 自动完成，推送到群 | 节省大部分人力（仍需人工审核确认） |
+| 会议室预约提醒 | 手动逐个通知 | 自动发送，到点提醒 | 覆盖率显著提升（人工易遗漏） |
+| 通知下发 | 20 分钟起草 + 排版 | 1 分钟口述 → AI 排版 | 起草时间大幅缩短 |
+| 周报收集汇总 | 1-2 小时 | 自动催收 + 汇总 | 节省大部分时间（催收+格式化部分） |
+| 行政问答（请假流程等） | 每天被问 10+ 次 | AI 自动回复 | 减少重复答疑 |
 
 ---
 
@@ -242,17 +224,12 @@ clawhub install meeting-minutes
 
 ### 2.2 架构
 
-```
-Cron (每天 09:00)
-       │
-       ▼
-  Main Agent (协调)
-       │
-       ├──→ Sub-Agent: Web 搜索竞品信息
-       │
-       ├──→ Sub-Agent: 整理分析 & 生成报告
-       │
-       └──→ 钉钉推送到运营群
+```mermaid
+flowchart TD
+    Cron["Cron 每天 09:00"] --> Main["Main Agent (协调)"]
+    Main --> Search["Sub-Agent: Web 搜索竞品信息"]
+    Main --> Analyze["Sub-Agent: 整理分析 & 生成报告"]
+    Main --> Push["钉钉推送到运营群"]
 ```
 
 ### 2.3 关键配置
@@ -263,7 +240,7 @@ Cron (每天 09:00)
 {
   "id": "ops-analyst",
   "name": "运营分析 Agent",
-  "model": "bailian/qwen3.5-plus",
+  "model": "bailian/kimi-k2.5",
   "workspace": "~/.openclaw/workspace-ops-analyst",
   "tools": {
     "allow": ["read", "write", "edit", "web_search", "memory_search", "message"],
@@ -330,17 +307,12 @@ openclaw cron add --agent ops-analyst \
 
 利用 OpenClaw + OCR Skill + 飞书多维表格实现自动化：
 
-```
-发票图片（拍照/扫描）
-       │
-       ▼
-  财务 Agent
-       │
-       ├──→ PaddleOCR Skill：识别发票内容
-       │
-       ├──→ 结构化提取：发票号、金额、日期、开票方、税额
-       │
-       └──→ 写入飞书多维表格 / 生成 CSV
+```mermaid
+flowchart TD
+    Input["发票图片（拍照/扫描）"] --> Finance["财务 Agent"]
+    Finance --> OCR["PaddleOCR Skill：识别发票内容"]
+    OCR --> Extract["结构化提取：发票号、金额、日期、开票方、税额"]
+    Extract --> Output["写入飞书多维表格 / 生成 CSV"]
 ```
 
 ### 3.3 关键配置
@@ -357,7 +329,7 @@ clawhub install paddleocr
 {
   "id": "finance-assistant",
   "name": "财务助手",
-  "model": "bailian/qwen3.5-plus",
+  "model": "bailian/kimi-k2.5",
   "workspace": "~/.openclaw/workspace-finance-assistant",
   "tools": {
     "allow": ["read", "write", "edit", "memory_search", "message"],
@@ -416,8 +388,8 @@ CSV 格式，表头：发票代码,发票号码,开票日期,购买方,销售方
 |------|---------|---------|
 | 单张发票耗时 | 2-3 分钟 | 10 秒 |
 | 500 张发票 | 2-3 天 | 约 1.5 小时 |
-| 错误率 | 3-5%（手误） | <1%（OCR 偶有误差，但有校验） |
-| 格式一致性 | 依赖个人习惯 | 100% 标准化 |
+| 错误率 | 3-5%（手误） | 格式规范的发票约 1-3%，复杂/手写发票需人工复核 |
+| 格式一致性 | 依赖个人习惯 | 输出格式统一（由模板控制） |
 
 ---
 
@@ -434,37 +406,18 @@ CSV 格式，表头：发票代码,发票号码,开票日期,购买方,销售方
 
 ### 4.2 架构
 
-```
-┌────────────────────────────────────────────┐
-│               OpenClaw 平台                │
-│                                            │
-│  ┌──────────┐                              │
-│  │ Main     │                              │
-│  │ Agent    │──→ 协调 Morning Brief 和日报  │
-│  └────┬─────┘                              │
-│       │                                    │
-│  ┌────┴──────────────┐                     │
-│  │                   │                     │
-│  ▼                   ▼                     │
-│ ┌──────────┐  ┌──────────┐                 │
-│ │ Brief    │  │ EOD      │                 │
-│ │ Agent    │  │ Agent    │                 │
-│ │(早报生成)│  │(日报汇总)│                 │
-│ └────┬─────┘  └────┬─────┘                 │
-│      │             │                       │
-│      ▼             ▼                       │
-│  ┌───────┐    ┌───────┐                    │
-│  │Memory │    │Memory │                    │
-│  └───────┘    └───────┘                    │
-│                                            │
-│  Cron: 08:00 Morning Brief                 │
-│  Cron: 00:10 EOD 日报                      │
-└──────────────────┬─────────────────────────┘
-                   │
-                   ▼
-            ┌──────────┐
-            │ 钉钉推送  │
-            └──────────┘
+```mermaid
+flowchart TD
+    subgraph OpenClaw["OpenClaw 平台"]
+        Main["Main Agent\n(协调)"] --> Brief["Brief Agent\n(早报生成)"]
+        Main --> EOD["EOD Agent\n(日报汇总)"]
+        Brief --- BriefMem["Memory"]
+        EOD --- EODMem["Memory"]
+        CronBrief["Cron 08:00"] --> Main
+        CronEOD["Cron 00:10"] --> Main
+    end
+    Brief --> DingTalk["钉钉推送"]
+    EOD --> DingTalk
 ```
 
 ### 4.3 Morning Brief 配置
@@ -475,7 +428,7 @@ CSV 格式，表头：发票代码,发票号码,开票日期,购买方,销售方
 {
   "id": "brief-agent",
   "name": "Morning Brief Agent",
-  "model": "siliconflow/deepseek-v3",
+  "model": "bailian/glm-5",
   "workspace": "~/.openclaw/workspace-brief-agent",
   "tools": {
     "allow": ["read", "write", "web_search", "memory_search", "message"],
@@ -508,7 +461,7 @@ openclaw cron add --agent brief-agent \
 ---
 🌅 **[日期] Morning Brief**
 
-**🌤️ 天气**
+**天气**
 [城市] [天气] [温度] [穿衣建议]
 
 **📰 行业动态**
@@ -538,7 +491,7 @@ openclaw cron add --agent brief-agent \
 {
   "id": "eod-agent",
   "name": "EOD 日报 Agent",
-  "model": "siliconflow/deepseek-v3",
+  "model": "bailian/glm-5",
   "workspace": "~/.openclaw/workspace-eod-agent",
   "tools": {
     "allow": ["read", "write", "memory_search", "message"],
@@ -570,7 +523,7 @@ openclaw cron add --agent eod-agent \
 
 ## Daily Report Template
 ---
-📊 **[日期] EOD 日报**
+**[日期] EOD 日报**
 
 **✅ 今日完成**
 - [完成事项1]
@@ -598,7 +551,7 @@ openclaw cron add --agent eod-agent \
 |------|---------|----------|
 | Morning Brief | 无人做 / 轮值制（经常忘） | 每天 8:00 准时推送，从不遗漏 |
 | EOD 日报 | 每人写 15 分钟，汇总 30 分钟 | 自动生成，0 人力 |
-| 信息覆盖 | 依赖个人整理，遗漏多 | Memory 自动积累，越来越全面 |
+| 信息覆盖 | 依赖个人整理，遗漏多 | Memory 持续积累历史记录，覆盖面随时间增长 |
 | 团队信息同步 | 需要开会同步 | 人人看简报，减少低效会议 |
 
 ---
@@ -612,7 +565,7 @@ openclaw cron add --agent eod-agent \
 | 阶段 | 目标 | 配置 | 预计周期 |
 |------|------|------|---------|
 | **Phase 1** | 单 Agent + 单通道 | 一个 Main Agent + 钉钉通道，先用起来 | 1-2 天 |
-| **Phase 2** | 加 Memory + Skill | 开启 Memory 让 Agent 越来越懂你，安装需要的 Skill | 1 周 |
+| **Phase 2** | 加 Memory + Skill | 开启 Memory 积累上下文，安装所需 Skill | 1 周 |
 | **Phase 3** | 多 Agent 分工 | 按场景拆分 Agent（行政、运营、财务），各自独立 Workspace | 2-3 周 |
 | **Phase 4** | 自动化 | 配置 Cron 定时任务，实现无人值守的自动化流程 | 持续迭代 |
 
@@ -622,9 +575,9 @@ openclaw cron add --agent eod-agent \
 
 | 优先级 | 特征 | 示例 |
 |--------|------|------|
-| ⭐⭐⭐ **最优先** | 高频 + 低风险 + 规则明确 | 考勤统计、信息推送、日报生成 |
-| ⭐⭐ **次优先** | 中频 + 低风险 + 有模板 | 竞品分析、通知下发、会议纪要 |
-| ⭐ **可以尝试** | 低频 + 中风险 + 需判断 | 发票识别、数据分析、报告生成 |
+| **P0 最优先** | 高频 + 低风险 + 规则明确 | 考勤统计、信息推送、日报生成 |
+| **P1 次优先** | 中频 + 低风险 + 有模板 | 竞品分析、通知下发、会议纪要 |
+| **P2 可以尝试** | 低频 + 中风险 + 需判断 | 发票识别、数据分析、报告生成 |
 | ⚠️ **暂缓** | 任意频率 + 高风险 | 涉及审批、资金操作、对外发布 |
 
 > 💡 **核心原则**：先让 AI 做"出错了也没大问题"的事，积累信任后再逐步扩展。
@@ -682,12 +635,12 @@ Agent 通过 SSH 持续监控服务器状态（CPU、内存、磁盘、服务状
 - [01-入门指南](./01-OpenClaw%20入门指南：从零开始.md) — 零基础快速上手
 - [03-核心概念与配置](./03-OpenClaw%20核心概念与配置.md) — 理解 Agent、Workspace、Binding 等概念
 - [04-通道配置（钉钉）](./04-OpenClaw%20通道配置（钉钉）.md) — 本章案例的钉钉配置基础
-- [05-Memory：让 AI 越用越聪明](./05-OpenClaw%20Memory：让%20AI%20越用越聪明.md) — 本章案例中 Memory 的详细用法
+- [05-Memory：持久记忆系统](./05-OpenClaw%20Memory：让%20AI%20越用越聪明.md) — 本章案例中 Memory 的详细用法
+- [09-自动化：Cron 与 Heartbeat](./09-OpenClaw%20自动化：Cron%20与%20Heartbeat.md) — 本章中 Cron 定时任务的完整语法与配置
 - [11-Multi-Agent：多智能体协作](./11-OpenClaw%20Multi-Agent：多智能体协作.md) — 案例四中多 Agent 架构的深入讲解
 - [06-大模型配置与费用优化](./06-OpenClaw%20大模型配置与费用优化.md) — 模型选择和费用控制
 - [10-规范与安全准则](./10-OpenClaw%20规范与安全准则.md) — 配置规范和安全要求
 - [OpenClaw 官方文档](https://docs.openclaw.ai)
-- 有问题？联系内部 AI 基础设施团队或在钉钉群内提问
 
 ---
 

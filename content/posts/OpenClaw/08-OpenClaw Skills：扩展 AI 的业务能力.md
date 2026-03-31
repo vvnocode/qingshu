@@ -1,33 +1,17 @@
 +++
-date = '2026-03-15T00:08:00+08:00'
+date = '2026-03-15T11:20:00+08:00'
 draft = false
 title = 'OpenClaw Skills：扩展 AI 的业务能力'
-tags = ['OpenClaw', 'Skills']
+tags = ['OpenClaw', 'AI', 'Agent', 'Skills']
 +++
 
-## 本章导读
+# OpenClaw Skills：扩展 AI 的业务能力
 
-> **这篇文档回答三个问题：**
->
-> 1. Skills 是什么？
-> 2. 怎么安装和使用 Skill？
-> 3. 怎么把 Skill 扩展到业务部门的实际工作中？
-
-如果把 OpenClaw 比作一位新同事，那 **Skill 就是你给他装的"插件"或教他的"新技能"**。
-
-装上"简历筛选"Skill，他就能帮 HR 筛选简历；装上"发票识别"Skill，他就能帮财务识别发票信息。**不需要写代码，不需要改系统，只需要一个 Markdown 文件。**
+Skill 是 OpenClaw 的能力扩展机制——通过一个 Markdown 文件描述工作流程，Agent 就能执行对应任务。装上"简历筛选"Skill 就能帮 HR 筛简历，装上"发票识别"Skill 就能帮财务识别发票。不需要写代码，不需要改系统。
 
 ---
 
 ## 1. Skill 的定位
-
-### 类比理解：给 AI 装插件 / 学新技能
-
-| 生活类比 | 对应 Skill |
-|---------|-----------|
-| 给手机装 App | 给 Agent 装 Skill |
-| 教新同事一套 SOP | 写一份 SKILL.md |
-| 通用员工 → 专业岗位 | 通用 Agent → 领域专家 |
 
 ### Skill 的本质
 
@@ -78,7 +62,7 @@ Skill 采用**开放标准格式**，一次编写，可在 20+ 平台使用：
 | 门槛 | 零代码，会写文档就行 | 需要 JS/TS 开发能力 |
 | 典型例子 | 日报生成、简历筛选、数据分析 | 钉钉通道、数据库连接、OCR 服务 |
 
-> 💡 **简单记忆**：Skill 是"教 Agent 做事的说明书"，Plugin 是"给 Agent 装的新器官"。
+> Skill 是 Markdown 描述的工作流程，Agent 按描述执行；Plugin 是 JS/TS 代码，直接扩展 Agent 的运行时能力。
 
 ---
 
@@ -257,11 +241,11 @@ Agent 会自动下载、验证并安装，全程无需命令行。
 
 | 平台 | 说明 | 地址 |
 |------|------|------|
-| **ClawHub** | OpenClaw 官方 Skill 仓库 | [clawhub.ai](https://clawhub.ai) |
-| **Skills.sh** | 跨平台 Skill 社区（兼容 20+ 平台） | [skills.sh](https://skills.sh) |
-| **SkillsMP** | Skill 市场与发现平台 | [skillsmp.com](https://skillsmp.com) |
+| **ClawHub** | OpenClaw 官方 Skill 仓库（如链接失效请联系内部 AI 基础设施团队） | [clawhub.ai](https://clawhub.ai) |
+| **Skills.sh** | 跨平台 Skill 社区（兼容 20+ 平台）（如链接失效请联系内部 AI 基础设施团队） | [skills.sh](https://skills.sh) |
+| **SkillsMP** | Skill 市场与发现平台（如链接失效请联系内部 AI 基础设施团队） | [skillsmp.com](https://skillsmp.com) |
 
-> 💡 建议优先在 ClawHub 搜索官方审核过的 Skill，安全性更有保障。
+> 建议优先在 ClawHub 搜索官方审核过的 Skill，安全性更有保障。
 
 ---
 
@@ -296,7 +280,7 @@ OpenClaw 按以下顺序加载 Skill（优先级从高到低）：
 
 > 💡 **隔离原则**：默认不共享，按需开放。先放 Workspace 级别，确认需要跨 Agent 使用后再提升到用户级或 `extraDirs`。
 
-### 技能门控（Gating）
+### 技能门控（Gating）（进阶）
 
 OpenClaw 在加载时根据 `SKILL.md` 中的 `metadata` 字段过滤技能：
 
@@ -367,7 +351,7 @@ npx skills add charon-fan/agent-playbook/self-improving-agent
 
 ## 8. 企业场景扩展示例
 
-Skill 的价值不仅在技术领域，更在于**让每个业务部门都能拥有自己的 AI 专家**。
+Skill 的价值不仅在技术领域，也适用于各业务部门——每个部门都可以定制自己的专属工作流。
 
 ### HR 部门
 
@@ -599,7 +583,9 @@ git submodule update --remote
 
 ---
 
-## 13. MCP 工具集成
+## 13. MCP 工具集成（进阶）
+
+> 以下内容面向需要对接外部系统的开发者。日常使用者可跳过。
 
 除了 Skill 和 Plugin，OpenClaw 还支持通过 **MCP（Model Context Protocol）** 接入外部工具。MCP 是一种标准化的 AI 工具接口协议，允许 Agent 调用第三方服务提供的工具。
 
@@ -641,12 +627,14 @@ git submodule update --remote
 
 > 更多 MCP 工具可浏览 [MCP Server 目录](https://github.com/modelcontextprotocol/servers)。
 
+> → MCP 协议的底层原理和注册机制详见 [12-架构与原理（进阶）](./12-OpenClaw%20架构与原理（进阶）.md)。
+
 ---
 
 ## 14. 延伸阅读
 
-- [Skills.sh 官方文档](https://skills.sh/docs) — Skill 标准规范与最佳实践
-- [ClawHub Skill 仓库](https://clawhub.ai) — 浏览和安装官方 Skill
+- [Skills.sh 官方文档](https://skills.sh/docs) — Skill 标准规范与最佳实践（如链接失效请联系内部 AI 基础设施团队）
+- [ClawHub Skill 仓库](https://clawhub.ai) — 浏览和安装官方 Skill（如链接失效请联系内部 AI 基础设施团队）
 - [OpenClaw Plugin 开发文档](https://docs.openclaw.ai/plugins) — 需要更深度扩展时参考
 
 ---

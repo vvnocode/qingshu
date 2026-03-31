@@ -1,17 +1,13 @@
 +++
-date = '2026-03-15T00:02:00+08:00'
+date = '2026-03-15T10:20:00+08:00'
 draft = false
 title = 'OpenClaw 安装与部署'
-tags = ['OpenClaw', '部署', 'Docker']
+tags = ['OpenClaw', 'AI', 'Agent', '部署']
 +++
 
-## 本章导读
+# OpenClaw 安装与部署
 
-> **这篇文档回答以下问题：**
->
-> 1. 怎么在 Mac / Linux / Windows 上安装 OpenClaw？
-> 2. 首次配置向导怎么走？
-> 3. 国内模型（阿里云百炼、硅基流动等）怎么快速接入？
+本篇覆盖安装、首次配置向导和国内模型快速接入。
 
 ---
 
@@ -65,7 +61,7 @@ iwr -useb https://openclaw.ai/install.ps1 | iex
 
 安装完成后，终端会提示你运行 `openclaw onboard` 进入配置向导。
 
-### 方式二：npm 全局安装
+### 方式二：npm 全局安装（推荐）
 
 如果你已经有 Node.js 环境，这种方式最直接：
 
@@ -100,7 +96,7 @@ npm link
 ./docker-setup.sh
 ```
 
-> 📝 Docker 部署适合生产环境，支持自动重启和持久化存储。详见 [OpenClaw 官方文档](https://docs.openclaw.ai/install/docker)。
+> Docker 部署适合生产环境，支持自动重启和持久化存储。详见 [OpenClaw 官方文档](https://docs.openclaw.ai/install/docker)。
 
 ---
 
@@ -112,7 +108,7 @@ npm link
 openclaw --version
 ```
 
-应输出类似 `openclaw v1.x.x` 的版本号。
+应输出类似 `OpenClaw 2026.3.13 (61d171a)` 的版本号。
 
 运行完整的环境检测：
 
@@ -217,7 +213,7 @@ OpenClaw 的所有配置文件都在 `~/.openclaw/` 目录下：
 主配置文件 `openclaw.json` 可以手动编辑，也可以通过命令修改：
 
 ```bash
-openclaw config set agents.defaults.model.primary "dashscope/qwen3.5-plus"
+openclaw config set agents.defaults.model.primary "bailian/kimi-k2.5"
 ```
 
 ---
@@ -230,75 +226,76 @@ openclaw config set agents.defaults.model.primary "dashscope/qwen3.5-plus"
 
 **获取 API Key**：登录 [百炼控制台](https://bailian.console.aliyun.com/) → API-KEY 管理 → 创建 Key
 
+百炼作为统一网关，聚合了 Qwen 系列及第三方模型（kimi-k2.5、MiniMax-M2.5、glm 系列等）。官方模型配置文档：[百炼模型配置](https://bailian.console.aliyun.com/cn-beijing/?tab=doc#/doc/?type=model&url=3023085)
+
 在 `~/.openclaw/openclaw.json` 中添加：
 
 ```json
 {
-  "env": {
-    "DASHSCOPE_API_KEY": "sk-xxxxxxxxxxxxxxxxxxxxxxxx"
-  },
   "models": {
-    "default": "bailian/qwen3.5-plus",
-    "providers": [
-      {
-        "id": "bailian",
-        "name": "阿里云百炼",
-        "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-        "apiKey": "${DASHSCOPE_API_KEY}",
+    "mode": "merge",
+    "providers": {
+      "bailian": {
+        "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
+        "apiKey": "YOUR_API_KEY",
         "api": "openai-completions",
         "models": [
+          {
+            "id": "MiniMax-M2.5",
+            "name": "MiniMax-M2.5",
+            "reasoning": false,
+            "input": ["text"],
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "contextWindow": 196608,
+            "maxTokens": 32768
+          },
+          {
+            "id": "glm-5",
+            "name": "glm-5",
+            "reasoning": false,
+            "input": ["text"],
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "contextWindow": 202752,
+            "maxTokens": 16384,
+            "compat": {
+              "thinkingFormat": "qwen"
+            }
+          },
           {
             "id": "kimi-k2.5",
             "name": "kimi-k2.5",
             "reasoning": false,
-            "input": [
-              "text",
-              "image"
-            ],
-            "cost": {
-              "input": 0,
-              "output": 0,
-              "cacheRead": 0,
-              "cacheWrite": 0
-            },
+            "input": ["text", "image"],
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
             "contextWindow": 262144,
-            "maxTokens": 32768
-          }  
+            "maxTokens": 32768,
+            "compat": {
+              "thinkingFormat": "qwen"
+            }
+          }
         ]
       }
-    ]
-  }
-}
-```
-
-### 硅基流动（快速开始）
-
-**获取 API Key**：登录 [硅基流动控制台](https://cloud.siliconflow.cn/) → API 密钥 → 新建密钥
-
-```json
-{
-  "env": {
-    "SILICONFLOW_API_KEY": "sk-xxx"
+    }
   },
-  "models": {
-    "default": "siliconflow/deepseek-ai/DeepSeek-V3",
-    "providers": [
-      {
-        "id": "siliconflow",
-        "name": "硅基流动",
-        "baseUrl": "https://api.siliconflow.cn/v1",
-        "apiKey": "${SILICONFLOW_API_KEY}",
-        "api": "openai-completions",
-        "models": [
-          { "id": "deepseek-ai/DeepSeek-V3", "name": "DeepSeek-V3", "contextWindow": 131072 }
-        ]
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "bailian/kimi-k2.5"
+      },
+      "models": {
+        "bailian/MiniMax-M2.5": {},
+        "bailian/glm-5": {},
+        "bailian/kimi-k2.5": {}
       }
-    ]
+    }
+  },
+  "gateway": {
+    "mode": "local"
   }
 }
 ```
 
-> 💡 **提示**：大部分国内模型平台都支持 OpenAI 兼容格式，只需修改 `baseUrl` 和 `apiKey` 即可接入。更多平台（火山方舟、智谱 AI、零一万物等）及多模型配置请参见 [06-大模型配置与费用优化](./06-OpenClaw%20大模型配置与费用优化.md)。
+> 以上列出推荐的 3 个模型。百炼还支持 qwen3.5-plus、qwen3-coder-next、qwen3-coder-plus、glm-4.7 等，完整列表见[官方文档](https://bailian.console.aliyun.com/cn-beijing/?tab=doc#/doc/?type=model&url=3023085)。百炼 Coding Plan 包月模式下 `cost` 均为 0。更多模型配置和费用优化策略请参见 [06-大模型配置与费用优化](./06-OpenClaw%20大模型配置与费用优化.md)。
 
 ---
 
@@ -310,12 +307,6 @@ openclaw config set agents.defaults.model.primary "dashscope/qwen3.5-plus"
 npm update -g openclaw
 # 或者
 openclaw update
-```
-
-### 查看更新日志
-
-```bash
-openclaw changelog
 ```
 
 ### 重启守护进程
@@ -390,11 +381,71 @@ server {
 
 ---
 
-## 10. 延伸阅读
+## 10. 运维注意事项
+
+### 磁盘空间管理
+
+OpenClaw 长期运行会积累大量 Session 日志（`.jsonl` 文件）和 Memory 文件。建议定期清理：
+
+```bash
+# 查看 sessions 目录占用
+du -sh ~/.openclaw/agents/*/sessions/
+
+# 清理超过 30 天的 session 文件
+find ~/.openclaw/agents/*/sessions/ -name "*.jsonl" -mtime +30 -delete
+```
+
+Memory 文件（`memory/*.md`）通常体积较小，但建议每季度归档一次过旧的记录。
+
+### 配置备份与恢复
+
+`openclaw.json` 是系统核心配置。虽然 AGENTS.md 模板中的 Configuration Change Rules 规定了自动备份（保留最新 50 次到 `~/.openclaw/backups/`），仍建议额外做定期备份：
+
+```bash
+# 手动备份
+cp ~/.openclaw/openclaw.json ~/.openclaw/openclaw.json.bak.$(date +%Y%m%d)
+
+# 恢复
+cp ~/.openclaw/backups/openclaw.json.back.<timestamp> ~/.openclaw/openclaw.json
+openclaw gateway restart
+```
+
+### Gateway 进程恢复
+
+如果 Gateway 进程崩溃或被意外终止：
+
+```bash
+# 检查进程状态
+openclaw gateway status
+
+# 重启
+openclaw gateway restart
+
+# 查看错误日志定位原因
+tail -100 ~/.openclaw/logs/error.log
+```
+
+生产环境建议使用 systemd 或 Docker 的 `restart: always` 策略确保进程自动恢复。
+
+### 外部链接说明
+
+本系列文档中引用的部分外部链接可能尚在建设中：
+
+| 链接 | 状态 |
+|------|------|
+| `https://docs.openclaw.ai` | 官方文档（建设中） |
+| `https://github.com/openclaw/openclaw` | GitHub 仓库（建设中） |
+| `https://clawhub.ai` | Skill 仓库（建设中） |
+
+如遇链接不可访问，请联系内部 AI 基础设施团队获取最新地址。
+
+---
+
+## 11. 延伸阅读
 
 - [03-核心概念与配置](./03-OpenClaw%20核心概念与配置.md) — 深入理解 Agent、Skill、Memory 的工作原理
 - [04-通道配置（钉钉）](./04-OpenClaw%20通道配置（钉钉）.md) — 把 OpenClaw 变成钉钉群里的 AI 助手
-- [05-Memory：让 AI 越用越聪明](./05-OpenClaw%20Memory：让%20AI%20越用越聪明.md) — 让 AI 真正"认识"你
+- [05-Memory：持久记忆系统](./05-OpenClaw%20Memory：让%20AI%20越用越聪明.md) — Memory 记忆系统详解
 - [06-大模型配置与费用优化](./06-OpenClaw%20大模型配置与费用优化.md) — 各模型对比和费用估算
 - [10-规范与安全准则](./10-OpenClaw%20规范与安全准则.md) — 生产环境安全加固
 
